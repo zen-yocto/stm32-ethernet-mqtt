@@ -1,0 +1,15 @@
+../Middlewares/Third_Party/lwIP/src/apps/sntp/sntp.c:290:1:sntp_process	1
+../Middlewares/Third_Party/lwIP/src/apps/sntp/sntp.c:340:1:sntp_initialize_request	1
+../Middlewares/Third_Party/lwIP/src/apps/sntp/sntp.c:370:1:sntp_retry	3
+../Middlewares/Third_Party/lwIP/src/apps/sntp/sntp.c:456:1:sntp_recv	11
+../Middlewares/Third_Party/lwIP/src/apps/sntp/sntp.c:560:1:sntp_send_request	3
+../Middlewares/Third_Party/lwIP/src/apps/sntp/sntp.c:625:1:sntp_request	3
+../Middlewares/Third_Party/lwIP/src/apps/sntp/sntp.c:671:1:sntp_init	6
+../Middlewares/Third_Party/lwIP/src/apps/sntp/sntp.c:710:1:sntp_stop	3
+../Middlewares/Third_Party/lwIP/src/apps/sntp/sntp.c:731:6:sntp_enabled	1
+../Middlewares/Third_Party/lwIP/src/apps/sntp/sntp.c:742:1:sntp_setoperatingmode	3
+../Middlewares/Third_Party/lwIP/src/apps/sntp/sntp.c:755:1:sntp_getoperatingmode	1
+../Middlewares/Third_Party/lwIP/src/apps/sntp/sntp.c:768:1:sntp_getreachability	2
+../Middlewares/Third_Party/lwIP/src/apps/sntp/sntp.c:801:1:sntp_setserver	3
+../Middlewares/Third_Party/lwIP/src/apps/sntp/sntp.c:882:1:sntp_getserver	2
+../Middlewares/Third_Party/lwIP/src/apps/sntp/sntp.c:899:1:sntp_getkodreceived	1

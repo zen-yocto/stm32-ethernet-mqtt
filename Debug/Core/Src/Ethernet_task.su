@@ -1,0 +1,5 @@
+../Core/Src/Ethernet_task.c:34:6:Ethernet_Task	72	static
+../Core/Src/Ethernet_task.c:149:6:CreateEthernetTask	16	static
+../Core/Src/Ethernet_task.c:160:6:ENC28J60_TestSend	80	static
+../Core/Src/Ethernet_task.c:197:7:low_level_output	24	static
+../Core/Src/Ethernet_task.c:227:14:low_level_input	1144	static

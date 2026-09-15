@@ -1,0 +1,197 @@
+/*
+ * MQTT_task.c
+ *
+ *  Created on: Sep 4, 2026
+ *      Author: Home
+ */
+
+#include "defines.h"
+#include "FreeRTOS.h"
+#include "task.h"
+#include "semphr.h"
+#include "lwip/api.h"
+#include "MQTTClient.h"
+#include "rtos_resources.h"
+
+#include "lwip/netdb.h"
+#include "lwip/err.h"
+#include "lwip/sys.h"
+#include <string.h>
+
+#define MQTT_BROKER_PORT 1883
+QueueHandle_t xMQTTQueue;
+TaskHandle_t mqttTaskHandle;
+DHT22_Data_t MQTT_data;
+
+
+
+void TimerInit(Timer *t);
+void TimerCountdownMS(Timer *t, unsigned int );
+char TimerIsExpired(Timer *t);
+int TimerLeftMS(Timer* t);
+void TimerCountdown(Timer* , unsigned int);
+void vMQTTTask(void *pvParameters);
+
+
+MQTTClient client;
+
+Network network;
+void NetworkInit(struct Network *n);
+int NetworkConnect(struct Network *n, const char *host, int port);
+int NetworkRead(struct Network *n, unsigned char *buffer, int len, int timeout_ms);
+int NetworkWrite(struct Network *n, unsigned char *buffer, int len, int timeout_ms);
+void NetworkDisconnect(struct Network *n);
+
+
+#define MQTT_BROKER_PORT   1883
+
+extern QueueHandle_t xMQTTQueue;
+
+
+
+void vMQTTTask(void *pvParameters)
+{
+    
+    unsigned char sendbuf[256], readbuf[256];
+    int rc;
+    NetworkInit(&network);
+    // Resolve broker hostname
+    ip_addr_t server_ip;
+
+    IP4_ADDR(&server_ip, 18,196,210,147);
+
+    // Initialize network
+    network.conn = netconn_new(NETCONN_TCP);
+    if (!network.conn) {
+        printf("Failed to create netconn\n");
+
+    }
+
+    rc = netconn_connect(network.conn, &server_ip, MQTT_BROKER_PORT);
+
+    // Initialize MQTT client
+    MQTTClientInit(&client, &network, 3000,
+                   sendbuf, sizeof(sendbuf),
+                   readbuf, sizeof(readbuf));
+
+    MQTTPacket_connectData data = MQTTPacket_connectData_initializer;
+    data.MQTTVersion = 3;
+    data.clientID.cstring = "stm32client";
+    data.keepAliveInterval = 30;
+    rc = MQTTConnect(&client, &data);
+  //  MQTTConnect(&client, &data);
+
+	for(;;){
+
+		if (xQueueReceive(xMQTTQueue, &MQTT_data, portMAX_DELAY) == pdPASS) {
+				  MQTTMessage message;
+				  char payload[128];
+
+				// Format as JSON
+			  snprintf(payload, sizeof(payload),
+			"{\"temp\":%.1f,\"humid\":%.1f,\"errors\":%d,\"good\":%d}",
+				MQTT_data.temp,
+				MQTT_data.humid,
+				MQTT_data.error_counter,
+				MQTT_data.good_data_count);
+				  message.qos = QOS0;
+                  message.retained = 0;
+                  message.payload = payload;
+                  message.payloadlen = strlen(payload);
+
+                 rc= MQTTPublish(&client, "stm32/sensor", &message);
+
+              }
+        if (rc != 0) {
+            printf("MQTT: Publish failed\n");
+        } else {
+            printf("MQTT: Published message\n");
+        }
+
+        vTaskDelay(pdMS_TO_TICKS(5000)); // publish every 5s
+    }
+}
+void CreateMQTTTask(void)
+{
+    xTaskCreate(
+        vMQTTTask,              // Task function
+        "MQTT Client Task",     // Task name
+        MQTT_Stack_Size,        // Stack size (words, not bytes)
+        NULL,                   // Task parameter
+        MQTT_TASK_PRIORITY,     // Task priority
+        &mqttTaskHandle         // Task handle
+    );
+}
+
+void NetworkInit(Network *n) {
+    n->conn = NULL;
+    n->mqttread = NetworkRead;
+    n->mqttwrite = NetworkWrite;
+    n->disconnect = NetworkDisconnect;
+}
+
+int NetworkConnect(Network *n, const char *host, int port) {
+    ip_addr_t server_ip;
+    err_t err = netconn_gethostbyname(host, &server_ip);
+    if (err != ERR_OK) return -1;
+
+    n->conn = netconn_new(NETCONN_TCP);
+    if (!n->conn) return -1;
+
+    err = netconn_connect(n->conn, &server_ip, port);
+    return (err == ERR_OK) ? 0 : -1;
+}
+
+int NetworkRead(Network *n, unsigned char *buffer, int len, int timeout_ms) {
+    struct netbuf *buf;
+    void *data;
+    u16_t buflen;
+
+    if (netconn_recv(n->conn, &buf) != ERR_OK) return -1;
+    netbuf_data(buf, &data, &buflen);
+
+    int copylen = (buflen < len) ? buflen : len;
+    memcpy(buffer, data, copylen);
+    netbuf_delete(buf);
+
+    return copylen;
+}
+
+int NetworkWrite(Network *n, unsigned char *buffer, int len, int timeout_ms) {
+    return (netconn_write(n->conn, buffer, len, NETCONN_COPY) == ERR_OK) ? len : -1;
+}
+
+void NetworkDisconnect(Network *n) {
+    if (n->conn) {
+        netconn_close(n->conn);
+        netconn_delete(n->conn);
+        n->conn = NULL;
+    }
+}
+
+// Timer functions
+void TimerInit(Timer *t) {
+    t->end_time = 0;
+}
+
+void TimerCountdownMS(Timer *t, unsigned int timeout_ms) {
+    t->end_time = xTaskGetTickCount() + pdMS_TO_TICKS(timeout_ms);
+}
+
+char TimerIsExpired(Timer *t) {
+    return (xTaskGetTickCount() > t->end_time);
+}
+void TimerCountdown(Timer* t, unsigned int timeout_ms)
+{
+    t->end_time = xTaskGetTickCount() + pdMS_TO_TICKS(timeout_ms);
+}
+
+int TimerLeftMS(Timer* t)
+{
+    TickType_t now = xTaskGetTickCount();
+    if (t->end_time > now)
+        return (t->end_time - now) * portTICK_PERIOD_MS;
+    else
+        return 0;
+}
+

@@ -18,10 +18,10 @@
 ../Core/Src/enc28j60.c:252:7:SystemReset	1
 ../Core/Src/enc28j60.c:265:11:ReadPhyReg	2
 ../Core/Src/enc28j60.c:284:7:WritePhyReg	2
-../Core/Src/enc28j60.c:297:7:ENC28J60_Init	2
-../Core/Src/enc28j60.c:342:6:ENC28J60_StartReceiving	1
-../Core/Src/enc28j60.c:350:6:ethernet_irq_handler	9
-../Core/Src/enc28j60.c:410:6:enc28j60_readFrame	5
-../Core/Src/enc28j60.c:475:6:sendreply	5
-../Core/Src/enc28j60.c:555:6:sendGratuitousARP	1
-../Core/Src/enc28j60.c:588:6:HAL_GPIO_EXTI_Callback	2
+../Core/Src/enc28j60.c:298:7:ENC28J60_Init	2
+../Core/Src/enc28j60.c:345:6:ENC28J60_StartReceiving	1
+../Core/Src/enc28j60.c:353:6:ethernet_irq_handler	9
+../Core/Src/enc28j60.c:414:6:enc28j60_parseFrame	18
+../Core/Src/enc28j60.c:496:6:sendreply	5
+../Core/Src/enc28j60.c:576:6:sendGratuitousARP	1
+../Core/Src/enc28j60.c:609:6:HAL_GPIO_EXTI_Callback	2

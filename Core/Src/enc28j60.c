@@ -293,6 +293,7 @@ void WriteControlReg(uint8_t reg, uint8_t regData)
 
 
 
+
 /*----------------------------------------------------------------------------*/
 err_t ENC28J60_Init()
 {
@@ -308,10 +309,11 @@ err_t ENC28J60_Init()
   }
   // Rx/Tx buffers
   WriteControlRegPair(ERXSTL, ENC28J60_RX_BUF_START);
+  WriteControlRegPair(ERXRDPTL,ENC28J60_RX_BUF_END );
   WriteControlRegPair(ERXNDL, ENC28J60_RX_BUF_END);
-  
+
   WriteControlRegPair(ERDPTL, ENC28J60_RX_BUF_START);
-  
+
   // MAC address
   WriteControlReg(MAADR1, myMAC[0]);
   WriteControlReg(MAADR2, myMAC[1]);
@@ -322,13 +324,14 @@ err_t ENC28J60_Init()
   
   WriteControlReg(MACON1, MACON1_TXPAUS_BIT | MACON1_RXPAUS_BIT | MACON1_MARXEN_BIT);
   WriteControlReg(MACON3, MACON3_PADCFG0_BIT | MACON3_TXCRCEN_BIT | MACON3_FRMLNEN_BIT| MACON3_FULDPX_BIT);
+  WriteControlReg(ERXFCON, ERXFCON_UCEN_BIT|ERXFCON_BCEN_BIT|ERXFCON_CRCEN_BIT);
 
-    
   WriteControlRegPair(MAIPGL, ENC28J60_NBB_PACKET_GAP);
   WriteControlReg(MABBIPG, ENC28J60_BB_PACKET_GAP);
-  
+
   WriteControlRegPair(MAMXFLL, ENC28J60_FRAME_DATA_MAX);
-  
+
+
   // PHY resisters
   WritePhyReg(PHCON2, PHCON2_HDLDIS_BIT);
   WritePhyReg(PHCON1, 0x0100);
@@ -407,71 +410,89 @@ void ethernet_irq_handler(void) {
     }
 
 }
-void enc28j60_readFrame(ENC28J60_Frame *frame) {
+uint8_t is_mqtt =0;
+void enc28j60_parseFrame(ENC28J60_Frame *f, const uint8_t *buf, uint16_t len)
+{
+    const uint8_t *ptr = buf;
 
-    uint8_t hdr[8]; // RX header: nextPtr(2) + length(2) + status(4)
+    // --- ENC28J60 RX header ---
 
-    // 1. Read RX header first
-    ReadBufferMem(hdr, 6);
-        frame->nextPtr = hdr[0] | (hdr[1] << 8);
-        frame->length  = hdr[2] | (hdr[3] << 8);
-        frame->status  = hdr[4] | (hdr[5] << 8);// | (hdr[6] << 16) | (hdr[7] << 24);
+    // --- Ethernet header ---
+    memcpy(f->destMAC, ptr, 6); ptr += 6;
+    memcpy(f->srcMAC,  ptr, 6); ptr += 6;
+    f->etherType = (ptr[0] << 8) | ptr[1]; ptr += 2;
 
-        // 2. Read full Ethernet frame into local buffer
-        if(frame->length<= ENC28J60_MAX_FRAME)
-        ReadBufferMem(localBuf, frame->length);
+    // --- ARP ---
+    if (f->etherType == 0x0806 && len >= 42) {
+        f->arp.hwType    = (ptr[0] << 8) | ptr[1];
+        f->arp.protoType = (ptr[2] << 8) | ptr[3];
+        f->arp.hwSize    = ptr[4];
+        f->arp.protoSize = ptr[5];
+        f->arp.opcode    = (ptr[6] << 8) | ptr[7];
+        memcpy(f->arp.senderMAC, ptr+8, 6);
+        memcpy(f->arp.senderIP,  ptr+14, 4);
+        memcpy(f->arp.targetMAC, ptr+18, 6);
+        memcpy(f->arp.targetIP,  ptr+24, 4);
+        ptr += 28;
+    }
 
-        // 3. Extract Ethernet header
-        memcpy(frame->destMAC, &localBuf[0], 6);
-        memcpy(frame->srcMAC,  &localBuf[6], 6);
-        frame->etherType = localBuf[12] << 8 | localBuf[13];
+    // --- IPv4 ---
+    else if (f->etherType == 0x0800 && len >= 34) {
+        f->ip.version_ihl    = ptr[0];
+        f->ip.tos            = ptr[1];
+        f->ip.totalLength    = (ptr[2] << 8) | ptr[3];
+        f->ip.identification = (ptr[4] << 8) | ptr[5];
+        f->ip.flags_fragment = (ptr[6] << 8) | ptr[7];
+        f->ip.ttl            = ptr[8];
+        f->ip.protocol       = ptr[9];
+        f->ip.headerChecksum = (ptr[10] << 8) | ptr[11];
+        memcpy(f->ip.srcIP, ptr+12, 4);
+        memcpy(f->ip.dstIP, ptr+16, 4);
+        uint8_t ip_header_len = (f->ip.version_ihl & 0x0F) * 4;
+        uint16_t payload_len  = f->ip.totalLength - ip_header_len;
+        ptr += ip_header_len;  // move pointer to start of payload
+        memcpy(f->data, ptr, payload_len);
+        // --- UDP ---
+        if (f->ip.protocol == 0x11 && len >= 42) {
+            f->udp.srcPort  = (ptr[0] << 8) | ptr[1];
+            f->udp.dstPort  = (ptr[2] << 8) | ptr[3];
+            f->udp.length   = (ptr[4] << 8) | ptr[5];
+            f->udp.checksum = (ptr[6] << 8) | ptr[7];
+            ptr += 8;
 
-        // 4. Branch by EtherType
-        if (frame->etherType == 0x0806) { // ARP
-            frame->arp.hwType    = localBuf[14] << 8 | localBuf[15];
-            frame->arp.protoType = localBuf[16] << 8 | localBuf[17];
-            frame->arp.hwSize    = localBuf[18];
-            frame->arp.protoSize = localBuf[19];
-            frame->arp.opcode    = localBuf[20] << 8 | localBuf[21];
-            memcpy(frame->arp.senderMAC, &localBuf[22], 6);
-            memcpy(frame->arp.senderIP,  &localBuf[28], 4);
-            memcpy(frame->arp.targetMAC, &localBuf[32], 6);
-            memcpy(frame->arp.targetIP,  &localBuf[38], 4);
+            uint16_t dataLen = f->udp.length - 8;
+            if (dataLen > sizeof(f->data)) dataLen = sizeof(f->data);
+            memcpy(f->data, ptr, dataLen);
         }
-        else if (frame->etherType == 0x0800) { // IPv4
-            frame->ip.version_ihl    = localBuf[14];
-            frame->ip.tos            = localBuf[15];
-            frame->ip.totalLength    = localBuf[16] << 8 | localBuf[17];
-            frame->ip.identification = localBuf[18] << 8 | localBuf[19];
-            frame->ip.flags_fragment = localBuf[20] << 8 | localBuf[21];
-            frame->ip.ttl            = localBuf[22];
-            frame->ip.protocol       = localBuf[23];
-            frame->ip.headerChecksum = localBuf[24] << 8 | localBuf[25];
-            memcpy(frame->ip.srcIP, &localBuf[26], 4);
-            memcpy(frame->ip.dstIP, &localBuf[30], 4);
 
-            if (frame->ip.protocol == 0x11) { // UDP
-                frame->udp.srcPort  = localBuf[34] << 8 | localBuf[35];
-                frame->udp.dstPort  = localBuf[36] << 8 | localBuf[37];
-                frame->udp.length   = localBuf[38] << 8 | localBuf[39];
-                frame->udp.checksum = localBuf[40] << 8 | localBuf[41];
-                memcpy(frame->data, &localBuf[42], frame->udp.length - 8);
-            } else {
-                memcpy(frame->data, &localBuf[34],
-                       frame->ip.totalLength - ((frame->ip.version_ihl & 0x0F) * 4));
+        // --- TCP (for MQTT detection) ---
+        else if (f->ip.protocol == 0x06) {
+            // Typical offsets: Ethernet (14) + IP (20) + TCP (20)
+            const uint8_t *tcp_payload = buf + 14 + 20 + 20;
+            uint8_t mqtt_type = tcp_payload[0];
+            f->data[0] = mqtt_type; // store first byte for inspection
+
+
+            if ((mqtt_type & 0xF0) == 0x10 ||  // CONNECT
+                (mqtt_type & 0xF0) == 0x20 ||  // CONNACK
+                (mqtt_type & 0xF0) == 0x30 ||  // PUBLISH
+                (mqtt_type & 0xF0) == 0x80 ||  // SUBSCRIBE
+                (mqtt_type & 0xF0) == 0x90 ||  // SUBACK
+                (mqtt_type & 0xF0) == 0xC0 ||  // PINGREQ
+                (mqtt_type & 0xF0) == 0xD0 ||  // PINGRESP
+                (mqtt_type & 0xF0) == 0xE0) {
+             is_mqtt = 1;
             }
         }
+    }
 
-        // 5. CRC/FCS (last 4 bytes of frame)
-        frame->fcs = localBuf[frame->length - 4] |
-                     (localBuf[frame->length - 3] << 8) |
-                     (localBuf[frame->length - 2] << 16) |
-                     (localBuf[frame->length - 1] << 24);
-
-        // 6. Advance RX read pointer
-        WriteControlRegPair(ERXRDPTL, frame->nextPtr);
-
+    // --- Optional FCS ---
+    if (len >= 4) {
+        f->fcs = (buf[len-4] | (buf[len-3] << 8) |
+                  (buf[len-2] << 16) | (buf[len-1] << 24));
+    }
 }
+
 void sendreply(ENC28J60_Frame *rxFrame) {
 
     uint16_t len = 0;

@@ -14,4 +14,6 @@
 extern QueueHandle_t dhtQueue;
 //extern SemaphoreHandle_t Netif_IRQSemaphore;
 extern SemaphoreHandle_t txSemaphore;
+extern QueueHandle_t xMQTTQueue;
+
 #endif /* SRC_RTOS_RESOURCES_H_ */

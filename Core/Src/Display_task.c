@@ -16,9 +16,10 @@ DHT22_Data_t dht22_display = {0};
 TaskHandle_t displayTaskHandle;
 
 void Display_Task(void *argument){
+	uint8_t count=0;
  	  ssd1306_Init();
  for(;;){
-	 if (xQueueReceive(dhtQueue, &dht22_display, portMAX_DELAY) == pdTRUE){
+	 if (xQueueReceive(dhtQueue, &dht22_display, pdMS_TO_TICKS(100)) == pdTRUE){
 		sprintf(buffer, "%.2fC", dht22_display.temp);
 		ssd1306_SetCursor(15, 5);
 		ssd1306_WriteString("Temp", Font_7x10, White);
@@ -35,8 +36,12 @@ void Display_Task(void *argument){
 			  ssd1306_WriteString(buffer, Font_7x10, White);
 				}
 	 	 	 }
-	  ssd1306_UpdateScreen();
-	  vTaskDelay(100);
+	 	 	 ssd1306_SetCursor(90, 5);
+	 	 	sprintf(buffer, "%3d",count) ;
+	 	 	ssd1306_WriteString(buffer, Font_7x10, White);
+	 	 	count= (count+1)%255;
+	 	 	ssd1306_UpdateScreen();
+	 	 	vTaskDelay(100);
  	 }
 
 }

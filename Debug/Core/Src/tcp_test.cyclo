@@ -1,2 +1,8 @@
-../Core/Src/tcp_test.c:10:14:tcp_client_connected	2
-../Core/Src/tcp_test.c:24:6:tcp_client_init	3
+../Core/Src/tcp_test.c:12:14:tcp_client_connected	2
+../Core/Src/tcp_test.c:26:6:tcp_client_init	3
+../Core/Src/tcp_test.c:55:5:mqtt_socket_connect	5
+../Core/Src/tcp_test.c:130:14:mqtt_recv	3
+../Core/Src/tcp_test.c:157:14:mqtt_connected	2
+../Core/Src/tcp_test.c:184:6:mqtt_test	2
+../Core/Src/tcp_test.c:251:6:send_test_publish	2
+../Core/Src/tcp_test.c:270:6:tcp_packets	6

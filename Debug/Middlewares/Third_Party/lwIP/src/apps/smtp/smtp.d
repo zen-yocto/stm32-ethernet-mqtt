@@ -27,28 +27,30 @@ Middlewares/Third_Party/lwIP/src/apps/smtp/smtp.o: \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h \
  ../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/sockets.h \
- ../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/altcp.h \
- ../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/tcp.h \
- ../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/tcpbase.h \
- ../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/mem.h \
- ../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/pbuf.h \
- ../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/ip.h \
- ../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/prot/ip.h \
- ../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/prot/../arch.h \
+ ../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/ip_addr.h \
  ../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/def.h \
  ../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/arch.h \
- ../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/ip_addr.h \
  ../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/ip4_addr.h \
  ../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/ip6_addr.h \
- ../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/ip4.h \
  ../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/netif.h \
+ ../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/pbuf.h \
  ../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/stats.h \
+ ../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/mem.h \
  ../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/memp.h \
  ../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/priv/memp_std.h \
  ../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/priv/memp_priv.h \
  ../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/priv/../opt.h \
  ../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/priv/../mem.h \
  ../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/priv/mem_priv.h \
+ ../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/inet.h \
+ ../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/errno.h \
+ ../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/altcp.h \
+ ../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/tcp.h \
+ ../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/tcpbase.h \
+ ../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/ip.h \
+ ../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/prot/ip.h \
+ ../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/prot/../arch.h \
+ ../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/ip4.h \
  ../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/prot/ip4.h \
  ../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/prot/../ip4_addr.h \
  ../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/ip6.h \
@@ -87,28 +89,30 @@ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/opt
 ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h:
 ../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/sockets.h:
-../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/altcp.h:
-../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/tcp.h:
-../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/tcpbase.h:
-../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/mem.h:
-../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/pbuf.h:
-../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/ip.h:
-../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/prot/ip.h:
-../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/prot/../arch.h:
+../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/ip_addr.h:
 ../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/def.h:
 ../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/arch.h:
-../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/ip_addr.h:
 ../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/ip4_addr.h:
 ../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/ip6_addr.h:
-../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/ip4.h:
 ../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/netif.h:
+../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/pbuf.h:
 ../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/stats.h:
+../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/mem.h:
 ../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/memp.h:
 ../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/priv/memp_std.h:
 ../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/priv/memp_priv.h:
 ../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/priv/../opt.h:
 ../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/priv/../mem.h:
 ../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/priv/mem_priv.h:
+../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/inet.h:
+../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/errno.h:
+../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/altcp.h:
+../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/tcp.h:
+../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/tcpbase.h:
+../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/ip.h:
+../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/prot/ip.h:
+../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/prot/../arch.h:
+../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/ip4.h:
 ../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/prot/ip4.h:
 ../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/prot/../ip4_addr.h:
 ../Middlewares/Third_Party/lwIP/src/apps/smtp/../../include/lwip/ip6.h:

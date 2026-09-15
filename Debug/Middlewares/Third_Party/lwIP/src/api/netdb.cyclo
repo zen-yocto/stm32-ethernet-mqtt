@@ -1,0 +1,4 @@
+../Middlewares/Third_Party/lwIP/src/api/netdb.c:93:1:lwip_gethostbyname	2
+../Middlewares/Third_Party/lwIP/src/api/netdb.c:167:1:lwip_gethostbyname_r	8
+../Middlewares/Third_Party/lwIP/src/api/netdb.c:241:1:lwip_freeaddrinfo	2
+../Middlewares/Third_Party/lwIP/src/api/netdb.c:274:1:lwip_getaddrinfo	26

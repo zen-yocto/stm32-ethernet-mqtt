@@ -64,6 +64,17 @@ Middlewares/Third_Party/lwIP/src/core/memp.o: \
  ../Middlewares/Third_Party/lwIP/src/core/../include/lwip/mld6.h \
  ../Middlewares/Third_Party/lwIP/src/core/../include/lwip/netbuf.h \
  ../Middlewares/Third_Party/lwIP/src/core/../include/lwip/netdb.h \
+ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/arch.h \
+ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/inet.h \
+ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/opt.h \
+ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/def.h \
+ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/ip_addr.h \
+ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/ip6_addr.h \
+ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/sockets.h \
+ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/netif.h \
+ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/err.h \
+ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/inet.h \
+ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/errno.h \
  ../Middlewares/Third_Party/lwIP/src/core/../include/lwip/opt.h \
  ../Middlewares/Third_Party/lwIP/src/core/../include/lwip/pbuf.h \
  ../Middlewares/Third_Party/lwIP/src/core/../include/lwip/priv/api_msg.h \
@@ -82,6 +93,7 @@ Middlewares/Third_Party/lwIP/src/core/memp.o: \
  ../Middlewares/Third_Party/lwIP/src/core/../include/lwip/priv/../timeouts.h \
  ../Middlewares/Third_Party/lwIP/src/core/../include/lwip/priv/nd6_priv.h \
  ../Middlewares/Third_Party/lwIP/src/core/../include/lwip/priv/sockets_priv.h \
+ ../Middlewares/Third_Party/lwIP/src/core/../include/lwip/priv/../sockets.h \
  ../Middlewares/Third_Party/lwIP/src/core/../include/lwip/priv/tcp_priv.h \
  ../Middlewares/Third_Party/lwIP/src/core/../include/lwip/priv/../tcp.h \
  ../Middlewares/Third_Party/lwIP/src/core/../include/lwip/priv/../pbuf.h \
@@ -166,6 +178,17 @@ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/err
 ../Middlewares/Third_Party/lwIP/src/core/../include/lwip/mld6.h:
 ../Middlewares/Third_Party/lwIP/src/core/../include/lwip/netbuf.h:
 ../Middlewares/Third_Party/lwIP/src/core/../include/lwip/netdb.h:
+D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/arch.h:
+D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/inet.h:
+D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/opt.h:
+D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/def.h:
+D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/ip_addr.h:
+D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/ip6_addr.h:
+D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/sockets.h:
+D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/netif.h:
+D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/err.h:
+D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/inet.h:
+D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/errno.h:
 ../Middlewares/Third_Party/lwIP/src/core/../include/lwip/opt.h:
 ../Middlewares/Third_Party/lwIP/src/core/../include/lwip/pbuf.h:
 ../Middlewares/Third_Party/lwIP/src/core/../include/lwip/priv/api_msg.h:
@@ -184,6 +207,7 @@ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/err
 ../Middlewares/Third_Party/lwIP/src/core/../include/lwip/priv/../timeouts.h:
 ../Middlewares/Third_Party/lwIP/src/core/../include/lwip/priv/nd6_priv.h:
 ../Middlewares/Third_Party/lwIP/src/core/../include/lwip/priv/sockets_priv.h:
+../Middlewares/Third_Party/lwIP/src/core/../include/lwip/priv/../sockets.h:
 ../Middlewares/Third_Party/lwIP/src/core/../include/lwip/priv/tcp_priv.h:
 ../Middlewares/Third_Party/lwIP/src/core/../include/lwip/priv/../tcp.h:
 ../Middlewares/Third_Party/lwIP/src/core/../include/lwip/priv/../pbuf.h:

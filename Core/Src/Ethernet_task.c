@@ -16,17 +16,18 @@
 #include "tcp_test.h"
 #include "rtos_resources.h"
 SemaphoreHandle_t txSemaphore;
-
+uint8_t MQTT_tcp_corrupt=0;
 
 ENC28J60_Frame recieveFrame;
 void ENC28J60_TestSend(void);
 void sendARPReply(uint8_t *rxFrame);
 void processFrame(uint16_t len);
+extern TaskHandle_t mqttTaskHandle;
+extern void CreateMQTTTask(void);
 struct pbuf *low_level_input(struct netif *netif);
 err_t low_level_output(struct netif *netif, struct pbuf *p);
 TaskHandle_t EthernetTaskHandle;
 uint8_t header[6];
-
 uint8_t irq_rec=0;
 uint8_t pktCNT=0;
 struct netif gnetif;
@@ -49,7 +50,7 @@ void Ethernet_Task(void *argument)
 		    memcpy(gnetif.hwaddr, myMAC, 6);
 
 		    gnetif.mtu = 1500;
-		    gnetif.flags = NETIF_FLAG_BROADCAST | NETIF_FLAG_ETHARP | NETIF_FLAG_LINK_UP;
+		    gnetif.flags = NETIF_FLAG_BROADCAST | NETIF_FLAG_ETHARP | NETIF_FLAG_LINK_UP |NETIF_FLAG_ETHERNET;
 
 		    gnetif.output     = etharp_output;
 		    gnetif.linkoutput = low_level_output;
@@ -79,35 +80,12 @@ void Ethernet_Task(void *argument)
 
 	WriteControlReg(EIE, EIE_INTIE | EIE_PKTIE | EIE_TXIE| EIE_TXERIE|EIE_RXERIE);
 
+
    // sendGratuitousARP();
 	for(;;){
 
-
-		    // Read the 6‑byte RX header
-		   // ReadBufferMem(header, 6);
-
-		    // Extract packet length (bytes 2–3 of header)
-		  //  len = header[2] | (header[3] << 8);
 		  //  ENC28J60_TestSend();
 		    // Now process the frame
-	if (irq_rec){
-
-	 while (ReadControlReg(EPKTCNT)){
-//		enc28j60_readFrame(&recieveFrame);
-//		BitFieldSet(ECON2, ECON2_PKTDEC_BIT);
-//
-//		sendreply(&recieveFrame);
-			struct pbuf *p = low_level_input(&gnetif);
-			if (p != NULL) {
-				if (gnetif.input(p, &gnetif) != ERR_OK) {
-					pbuf_free(p);
-				}
-			}
-			BitFieldSet(ECON2, ECON2_PKTDEC_BIT);
-	}irq_rec=0;
-
-
-		}
 
 
 //		ENC28J60_TestSend();
@@ -124,25 +102,56 @@ void Ethernet_Task(void *argument)
 	    uint16_t phir    = ReadPhyReg(PHIR);
 	    uint16_t phie    = ReadPhyReg(PHIE);
 
-
-	       if (estat & 0x40) { // BUFER bit set
-	           // 1. Disable receiver
-	           BitFieldClear(ECON1, ECON1_RXEN_BIT);
-	           // 2. Flush all pending packets
-	           WriteControlRegPair(ERXRDPTL, ENC28J60_RX_BUF_START);
-	           while (ReadControlReg(EPKTCNT) > 0) {
-	               BitFieldSet(ECON2, ECON2_PKTDEC_BIT);
+	           // If TXRTS is clear, release semaphore
+	           if (!(econ1 & ECON1_TXRTS_BIT)) {
+	               xSemaphoreGive(txSemaphore);
 	           }
-	               // Clear BUFER bit
-	               BitFieldClear(ESTAT, 0x40);
-	           // 3. Re-enable receiver
-	           BitFieldSet(ECON1, ECON1_RXEN_BIT);
-	       }
+
+	           if (estat & 0x40) {            // BUFER bit set
+
+	        	   BitFieldClear(ECON1, ECON1_RXEN_BIT);
+	        	      	       // 4) Clear BUFER in ESTAT
+	        	       BitFieldClear(ESTAT, 0x40);
+	        	       // 5) Reinitialize RX/TX buffer boundaries
+	        	       WriteControlRegPair(ERXSTL, ENC28J60_RX_BUF_START);
+	        	       WriteControlRegPair(ERXNDL, ENC28J60_RX_BUF_END);
+	        	       // 6) Reset RX pointers to a known state
+	        	       WriteControlRegPair(ERXRDPTL, ENC28J60_RX_BUF_END);
+	        	       WriteControlRegPair(ERDPTL,   ENC28J60_RX_BUF_START);
+	        	       // 7) Flush any residual packets
+	        	       while (ReadControlReg(EPKTCNT) > 0)
+	        	       {
+	        	           BitFieldSet(ECON2, ECON2_PKTDEC_BIT);
+	        	       }
+	        	       MQTT_tcp_corrupt=1;
+	        	       vTaskDelete(mqttTaskHandle);
+	        	       // 8) Re-enable RX
+	        	       BitFieldSet(ECON1, ECON1_RXEN_BIT);
+	        	     CreateMQTTTask();
+	           }
 	       if(phir)
 	       WritePhyReg(PHIR, 0x10);
 	       BitFieldSet(EIE, 0x80);
-	       tcp_client_init();
-	osDelay(500);
+	       if (irq_rec){
+
+	       	 while(ReadControlReg(EPKTCNT)>0){
+	       		//enc28j60_readFrame(&recieveFrame);
+	       //		BitFieldSet(ECON2, ECON2_PKTDEC_BIT);
+	       //
+	       //		sendreply(&recieveFrame);
+	       			struct pbuf *p = low_level_input(&gnetif);
+	       			if (p != NULL) {
+	       				if (gnetif.input(p, &gnetif) != ERR_OK) {
+	       					pbuf_free(p);
+	       				}
+	       			}
+
+	       	}irq_rec=0;
+
+	       	   }
+   //send_test_publish(&gnetif);
+	//  tcp_client_init();
+	 	osDelay(100);
 	}
 
 }
@@ -191,27 +200,29 @@ void ENC28J60_TestSend(void)
 }
 
 
-
-
-
 err_t low_level_output(struct netif *netif, struct pbuf *p) {
-    struct pbuf *q;
-    uint16_t tx_len = 0;
+	struct pbuf *q;
+	uint16_t tx_len = 0;
     uint8_t ctrl = PKTCTRL_DEFAULT;
-    if (xSemaphoreTake(txSemaphore, pdMS_TO_TICKS(100)) == pdTRUE) {
+    uint16_t enc28j60_tx_start_ptr= ENC28J60_TX_BUF_START;
+    uint16_t enc28j60_tx_end_ptr= ENC28J60_TX_BUF_START;
+if(enc28j60_tx_start_ptr+p->tot_len>ENC28J60_RX_BUF_START)
+	enc28j60_tx_start_ptr=ENC28J60_TX_BUF_START;
 
-    // --- Set TX write pointer ---
-    WriteControlRegPair(EWRPTL, ENC28J60_TX_BUF_START);
-	WriteBufferMem(&ctrl, 1);
+    if (xSemaphoreTake(txSemaphore, portMAX_DELAY) == pdTRUE) {
+    	WriteControlRegPair(ETXSTL, enc28j60_tx_start_ptr);
+       // 2. Set write pointer
+      WriteControlRegPair(EWRPTL, enc28j60_tx_start_ptr);
+       WriteBufferMem(&ctrl, 1);
 
     // --- Copy pbuf chain into ENC28J60 TX buffer ---
-    for (q = p; q != NULL; q = q->next) {
-        WriteBufferMem((uint8_t*)q->payload, q->len);
-        tx_len += q->len;
-    }
-
+	for ( q= p; q != NULL; q = q->next) {
+	    WriteBufferMem((uint8_t*)q->payload, q->len);
+	    tx_len += q->len;
+	}
+	enc28j60_tx_end_ptr +=tx_len;
     // --- Set TX end pointer ---
-    WriteControlRegPair(ETXNDL, ENC28J60_TX_BUF_START + tx_len);
+    WriteControlRegPair(ETXNDL, enc28j60_tx_end_ptr);
 
     // --- Trigger TX ---
     BitFieldSet(ECON1, ECON1_TXRTS_BIT);
@@ -221,46 +232,90 @@ err_t low_level_output(struct netif *netif, struct pbuf *p) {
             return ERR_TIMEOUT;
         }
 
-
 }
 
-struct pbuf *low_level_input(struct netif *netif) {
-    // Read frame into recieveFrame (your function should also fill nextPtr)
-	uint8_t hdr[8];
-	//enc28j60_readFrame(&recieveFrame);
-	ENC28J60_Frame frame;
+uint16_t freeSpace=0;
+uint16_t ERXWRPT=0;
+uint16_t ERXRDPT=0;
+struct pbuf *low_level_input(struct netif *netif)
+{
+    uint8_t hdr[6];
+    ENC28J60_Frame frame;
+
+    uint16_t enc28j60_current_packet_ptr = ENC28J60_RX_BUF_START;
+
     ReadBufferMem(hdr, 6);
-           frame.nextPtr = hdr[0] | (hdr[1] << 8);
-           frame.length  = hdr[2] | (hdr[3] << 8);
-           frame.status  = hdr[4] | (hdr[5] << 8);// | (hdr[6] << 16) | (hdr[7] << 24);
-           if(frame.length ==0) return NULL;
 
-    // Allocate pbuf chain
-		struct pbuf *p = pbuf_alloc(PBUF_RAW, frame.length-4, PBUF_POOL);
-		if (p == NULL) {
-		// Drop packet if no memory
-		WriteControlRegPair(ERXRDPTL, frame.nextPtr);
-		return NULL;
-		}
+    frame.nextPtr = hdr[0] | (hdr[1] << 8);
+    frame.length  = hdr[2] | (hdr[3] << 8);
+    frame.status  = hdr[4] | (hdr[5] << 8);
 
-    // Copy frame data into pbuf chain
+    if (frame.length == 0) return NULL;
+    if (frame.length > ENC28J60_MAX_FRAME) return NULL;
+    // Read RX pointers
+    ERXWRPT = ReadControlRegPair(ERXWRPTL);
+    ERXRDPT = ReadControlRegPair(ERXRDPTL);
+    if (frame.nextPtr < ENC28J60_RX_BUF_START ||
+        frame.nextPtr > ENC28J60_RX_BUF_END)
+    {
+       // Disable RX
+
+    	ENC28J60_Init();
+    	return NULL;
+    }
+    // Compute free space in RX FIFO
+
+
+    if (ERXWRPT > ERXRDPT)
+    {
+        // Case 1: write pointer ahead of read pointer
+        freeSpace = (ENC28J60_RX_BUF_END - ENC28J60_RX_BUF_START) -
+                    (ERXWRPT - ERXRDPT);
+    }
+    else if (ERXWRPT == ERXRDPT)
+    {
+        // Case 2: buffer empty
+        freeSpace = (ENC28J60_RX_BUF_END - ENC28J60_RX_BUF_START);
+    }
+    else
+    {
+        // Case 3: write pointer wrapped
+        freeSpace = (ERXRDPT - ERXWRPT - 1);
+    }
+    struct pbuf *p = pbuf_alloc(PBUF_RAW, frame.length - 4, PBUF_POOL);
+    if (p == NULL)
+    {
+        WriteControlRegPair(ERXRDPTL, enc28j60_current_packet_ptr);
+        BitFieldSet(ECON2, ECON2_PKTDEC_BIT);
+        return NULL;
+    }
+
     struct pbuf *q;
-    if(frame.length<= ENC28J60_MAX_FRAME){
-    for (q = p; q != NULL; q = q->next) {
-    	ReadBufferMem(q->payload,q->len );
-        //memcpy(q->payload, &recieveFrame.data, q->len);
+    for (q = p; q != NULL; q = q->next)
+        ReadBufferMem(q->payload, q->len);
 
-    }
+    uint8_t dummy[4];
+    ReadBufferMem(dummy, 4);
 
-      uint8_t dummy[4];
-          ReadBufferMem(dummy, 4);
-    // Release RX packet (advance RX read pointer)
-          if(frame.nextPtr>ENC28J60_RX_BUF_END)
-        	  frame.nextPtr=ENC28J60_RX_BUF_START;
-    WriteControlRegPair(ERXRDPTL, frame.nextPtr);
-    }
+    // ---------------------------------------------------------
+    // A) ERXRDPT = nextPtr - 1 (with wrap)
+    // ---------------------------------------------------------
+    if (frame.nextPtr == ENC28J60_RX_BUF_START)
+        WriteControlRegPair(ERXRDPTL, ENC28J60_RX_BUF_END);
+    else
+        WriteControlRegPair(ERXRDPTL, frame.nextPtr - 1);
+
+    // ---------------------------------------------------------
+    // B) ERDPT = nextPtr
+    // ---------------------------------------------------------
+    WriteControlRegPair(ERDPTL, frame.nextPtr);
+
+    // ---------------------------------------------------------
+    // C) PKTDEC
+    // ---------------------------------------------------------
+    BitFieldSet(ECON2, ECON2_PKTDEC_BIT);
+
     return p;
-
 }
 
 

@@ -36,7 +36,7 @@
 #define NO_SYS                          0   /* Using FreeRTOS */
 #define SYS_LIGHTWEIGHT_PROT            1   /* Enable lightweight protection */
 #define LWIP_NETCONN                    1   /* Enable Netconn API */
-#define LWIP_SOCKET                     0   /* Enable Socket API */
+#define LWIP_SOCKET                     1   /* Enable Socket API */
 
 /* ---------- Protocols ---------- */
 #define LWIP_IPV6                       0   /* IPv4 only */
@@ -50,34 +50,39 @@
 /* ---------- Memory pools ---------- */
 #define MEM_ALIGNMENT                   4
 #define MEM_SIZE                        8192   /* 8 KB heap for lwIP */
-#define MEMP_NUM_PBUF                   16
+#define MEMP_NUM_PBUF                   30
 #define MEMP_NUM_TCP_PCB                6
 #define MEMP_NUM_UDP_PCB                4
-#define MEMP_NUM_TCP_SEG                8
+#define MEMP_NUM_TCP_SEG                25
 #define MEMP_NUM_SYS_TIMEOUT            10
 
 /* ---------- TCP settings ---------- */
 #define TCP_MSS                         1460
-#define TCP_SND_BUF                     (4 * TCP_MSS)
-#define TCP_SND_QUEUELEN                8
-#define TCP_WND                         (2 * TCP_MSS)
+#define TCP_SND_BUF                     (10 * TCP_MSS)
+#define TCP_SND_QUEUELEN                25
+#define TCP_WND                         (10 * TCP_MSS)
 #define LWIP_WND_SCALE                  0
 #define TCP_RCV_SCALE                   0
-#define TCPIP_MBOX_SIZE 				16
-
+#define TCPIP_MBOX_SIZE 				30
+#define DEFAULT_TCP_RECVMBOX_SIZE		30
 /* ---------- PBUF pool ---------- */
-#define PBUF_POOL_SIZE                  16
-
+#define PBUF_POOL_SIZE                  12
+#define PBUF_POOL_BUFSIZE      			1524
 /* ---------- Statistics & debugging ---------- */
 #define LWIP_STATS                      0
 //#define LWIP_DEBUG                      0
-
+/*---------------TCP_IP Thread */
+#define TCPIP_THREAD_STACKSIZE   1024   // 4 KB stack
+#define TCPIP_THREAD_PRIO       17
 /* ---------- Misc ---------- */
 #define LWIP_HAVE_LOOPIF                0
 #define LWIP_NETIF_LINK_CALLBACK        0
 #define LWIP_NETIF_STATUS_CALLBACK      0
 #define LWIP_PROVIDE_ERRNO
 #define LWIP_TCPIP_CORE_LOCKING 		1
+#define LWIP_NETCONN_FULLDUPLEX 		0
+#define LWIP_TIMEVAL_PRIVATE			0
+
 
 #endif /* LWIP_HDR_LWIPOPTS_H */
 

@@ -49,7 +49,7 @@
 #define ENC28J60_BUF_COMMAND_ARG                                0x1A
 #define ENC28J60_RESET_COMMAND_ARG                              0x1F
 
-#define ENC28J60_FRAME_DATA_MAX                                 1024
+#define ENC28J60_FRAME_DATA_MAX                                 1518
 
 #define ENC28J60_BB_PACKET_GAP                                  0x15
 #define ENC28J60_NBB_PACKET_GAP                                 0x0C12
@@ -376,7 +376,7 @@ typedef struct {
     } udp;
 
     // Payload (DNS, ICMP, TCP, etc.)
-    uint8_t data[ENC28J60_FRAME_DATA_MAX];
+    uint8_t data[ENC28J60_FRAME_DATA_MAX-1500];
 
     // Optional CRC/FCS
     uint32_t fcs;
@@ -425,6 +425,7 @@ uint16_t ReadPhyReg(uint8_t reg);
 void WritePhyReg(uint8_t reg, uint16_t regData);
 
 void enc28j60_readFrame(ENC28J60_Frame *frame);
+void enc28j60_parseFrame(ENC28J60_Frame *f, const uint8_t *buf, uint16_t len);
 void sendreply(ENC28J60_Frame *rxFrame);
 void sendGratuitousARP(void);
 void ethernet_irq_handler(void);

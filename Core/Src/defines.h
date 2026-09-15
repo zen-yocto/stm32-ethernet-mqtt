@@ -11,15 +11,16 @@
 
 //#define USE_DHCP    0
 #define DHT22_TASK_PRIORITY  14
-#define DISPLAY_TASK_PRIORITY 13
-#define ETHERNET_TASK_PRIORITY 12
-#define MQTT_TASK_PRIORITY 10
+#define DISPLAY_TASK_PRIORITY 11
+#define ETHERNET_TASK_PRIORITY 13
+#define MQTT_TASK_PRIORITY 12
+
 //#define DEFAULT_TASK_PRIORITY 1
 
 #define ethernet_Stack_Size 	configMINIMAL_STACK_SIZE * 8
 #define display_Stack_Size 		configMINIMAL_STACK_SIZE * 4
 #define DHT22_Stack_Size  		configMINIMAL_STACK_SIZE * 4
-
+#define MQTT_Stack_Size			configMINIMAL_STACK_SIZE * 4
 #define DHT_PORT GPIOC
 #define DHT_PIN  GPIO_PIN_1
 

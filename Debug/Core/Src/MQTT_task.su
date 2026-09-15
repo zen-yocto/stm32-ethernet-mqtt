@@ -1,0 +1,12 @@
+../Core/Src/MQTT_task.c:46:6:mqtt_connect_netconn	120	static
+../Core/Src/MQTT_task.c:83:6:vMQTTTask	208	static
+../Core/Src/MQTT_task.c:129:6:CreateMQTTTask	16	static
+../Core/Src/MQTT_task.c:141:5:NetworkRead	48	static
+../Core/Src/MQTT_task.c:181:5:NetworkWrite	40	static
+../Core/Src/MQTT_task.c:188:6:NetworkDisconnect	16	static
+../Core/Src/MQTT_task.c:196:6:NetworkInit	16	static
+../Core/Src/MQTT_task.c:202:7:TimerInit	16	static
+../Core/Src/MQTT_task.c:207:6:TimerCountdownMS	16	static
+../Core/Src/MQTT_task.c:212:6:TimerCountdown	16	static
+../Core/Src/MQTT_task.c:216:5:TimerLeftMS	24	static
+../Core/Src/MQTT_task.c:224:6:TimerIsExpired	16	static

@@ -26,6 +26,8 @@ RM := rm -rf
 -include Middlewares/Third_Party/lwIP/src/apps/lwiperf/subdir.mk
 -include Middlewares/Third_Party/lwIP/src/apps/altcp_tls/subdir.mk
 -include Middlewares/Third_Party/lwIP/src/api/subdir.mk
+-include Middlewares/Third_Party/MQTT/MQTTPacket/src/subdir.mk
+-include Middlewares/Third_Party/MQTT/MQTTClient-C/src/subdir.mk
 -include Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/subdir.mk
 -include Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/subdir.mk
 -include Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/subdir.mk

@@ -23,7 +23,7 @@ uint8_t DHT_Read(float *temperature, float *humidity);
 void DHT22_Task(void *argument)
 {
 	 dhtQueue = xQueueCreate(5, sizeof(DHT22_Data_t));
-
+	 xMQTTQueue = xQueueCreate(5, sizeof(DHT22_Data_t));
 	 for(;;){
 		if (DHT_Read(&dht22_measure.temp, &dht22_measure.humid) == 0)
 			{
@@ -39,6 +39,13 @@ void DHT22_Task(void *argument)
 					if (uxQueueSpacesAvailable(dhtQueue) > 0) {
 						// Queue has space, safe to send
 						xQueueSend(dhtQueue, &dht22_measure, 0);
+					} else {
+						// Queue is full
+
+					}
+					if (uxQueueSpacesAvailable(xMQTTQueue) > 0) {
+						// Queue has space, safe to send
+						xQueueSend(xMQTTQueue, &dht22_measure, 0);
 					} else {
 						// Queue is full
 
@@ -96,7 +103,13 @@ uint8_t DHT_ReadByte(void)
 	  if (HAL_GPIO_ReadPin(DHT_PORT, DHT_PIN))
 		  result |= (1 << (7 - i));
 
-	 while (HAL_GPIO_ReadPin(DHT_PORT, DHT_PIN));
+	  uint32_t timeout = 10000;
+	        while (HAL_GPIO_ReadPin(DHT_PORT, DHT_PIN))
+	        {
+	            if (--timeout == 0)
+	                return 0xFF;   // timeout → abort byte read
+	        }
+
   }
 
   return result;

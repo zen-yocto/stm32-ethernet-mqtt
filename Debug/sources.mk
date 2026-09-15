@@ -30,6 +30,8 @@ Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 \
 Middlewares/Third_Party/FreeRTOS/Source \
 Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F \
 Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang \
+Middlewares/Third_Party/MQTT/MQTTClient-C/src \
+Middlewares/Third_Party/MQTT/MQTTPacket/src \
 Middlewares/Third_Party/lwIP/src/api \
 Middlewares/Third_Party/lwIP/src/apps/altcp_tls \
 Middlewares/Third_Party/lwIP/src/apps/lwiperf \

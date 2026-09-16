@@ -17,8 +17,8 @@
 #include "lwip/err.h"
 #include "lwip/sys.h"
 #include <string.h>
-
 #define MQTT_BROKER_PORT 1883
+
 QueueHandle_t xMQTTQueue;
 TaskHandle_t mqttTaskHandle;
 DHT22_Data_t MQTT_data;
@@ -91,7 +91,8 @@ void vMQTTTask(void *pvParameters)
 	//mqtt_socket_connect();
 
 	for(;;){
-		if(MQTT_tcp_corrupt) {netconn_close(network.conn);
+		if(MQTT_tcp_corrupt) {
+			netconn_close(network.conn);
 	       netconn_delete(network.conn); MQTT_tcp_corrupt=0;
 		}
 			if(!client.isconnected)

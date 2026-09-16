@@ -22,7 +22,7 @@ ENC28J60_Frame recieveFrame;
 void ENC28J60_TestSend(void);
 void sendARPReply(uint8_t *rxFrame);
 void processFrame(uint16_t len);
-extern TaskHandle_t mqttTaskHandle;
+
 extern void CreateMQTTTask(void);
 struct pbuf *low_level_input(struct netif *netif);
 err_t low_level_output(struct netif *netif, struct pbuf *p);
@@ -123,18 +123,18 @@ void Ethernet_Task(void *argument)
 	        	       {
 	        	           BitFieldSet(ECON2, ECON2_PKTDEC_BIT);
 	        	       }
-	        	       MQTT_tcp_corrupt=1;
-	        	       vTaskDelete(mqttTaskHandle);
+	        	       //MQTT_tcp_corrupt=1;
+	        	     //  vTaskDelete(mqttTaskHandle);
 	        	       // 8) Re-enable RX
 	        	       BitFieldSet(ECON1, ECON1_RXEN_BIT);
-	        	     CreateMQTTTask();
+	        	   // CreateMQTTTask();
 	           }
 	       if(phir)
 	       WritePhyReg(PHIR, 0x10);
 	       BitFieldSet(EIE, 0x80);
 	       if (irq_rec){
 
-	       	 while(ReadControlReg(EPKTCNT)>0){
+	       	 if(ReadControlReg(EPKTCNT)>0){
 	       		//enc28j60_readFrame(&recieveFrame);
 	       //		BitFieldSet(ECON2, ECON2_PKTDEC_BIT);
 	       //
@@ -255,12 +255,12 @@ struct pbuf *low_level_input(struct netif *netif)
     // Read RX pointers
     ERXWRPT = ReadControlRegPair(ERXWRPTL);
     ERXRDPT = ReadControlRegPair(ERXRDPTL);
+		if(ERXWRPT<ENC28J60_RX_BUF_START)
+			MQTT_tcp_corrupt=1;
     if (frame.nextPtr < ENC28J60_RX_BUF_START ||
         frame.nextPtr > ENC28J60_RX_BUF_END)
     {
-       // Disable RX
 
-    	ENC28J60_Init();
     	return NULL;
     }
     // Compute free space in RX FIFO

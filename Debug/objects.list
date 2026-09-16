@@ -1,4 +1,5 @@
 "./Core/Src/DHT22_measure_task.o"
+"./Core/Src/Diagnostic_task.o"
 "./Core/Src/Display_task.o"
 "./Core/Src/Ethernet_task.o"
 "./Core/Src/MQTT_task.o"

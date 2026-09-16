@@ -1,5 +1,5 @@
 ../Core/Src/Ethernet_task.c:35:6:Ethernet_Task	72	static
-../Core/Src/Ethernet_task.c:159:6:CreateEthernetTask	16	static
-../Core/Src/Ethernet_task.c:170:6:ENC28J60_TestSend	80	static
-../Core/Src/Ethernet_task.c:204:7:low_level_output	32	static
-../Core/Src/Ethernet_task.c:241:14:low_level_input	144	static
+../Core/Src/Ethernet_task.c:158:6:CreateEthernetTask	16	static
+../Core/Src/Ethernet_task.c:169:6:ENC28J60_TestSend	80	static
+../Core/Src/Ethernet_task.c:203:7:low_level_output	32	static
+../Core/Src/Ethernet_task.c:240:14:low_level_input	144	static

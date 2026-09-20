@@ -40,7 +40,7 @@ void SetCS(ENC28J60_CS_State state)
 
 
 /*----------------------------------------------------------------------------*/
- void WriteBytes(uint8_t* data, uint8_t size)
+ void WriteBytes(uint8_t* data, uint16_t size)
 {
   HAL_StatusTypeDef res = HAL_SPI_Transmit(&hspi2, data, size, ENC28J60_SPI_TIMEOUT);
 }

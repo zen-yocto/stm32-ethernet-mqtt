@@ -26,6 +26,7 @@ Core/Src \
 Core/Src/ssd1306 \
 Core/Startup \
 Drivers/STM32F4xx_HAL_Driver/Src \
+MBEDTLS/App \
 Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 \
 Middlewares/Third_Party/FreeRTOS/Source \
 Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F \
@@ -49,4 +50,5 @@ Middlewares/Third_Party/lwIP/src/include/arch \
 Middlewares/Third_Party/lwIP/src/netif \
 Middlewares/Third_Party/lwIP/src/netif/ppp \
 Middlewares/Third_Party/lwIP/src/netif/ppp/polarssl \
+Middlewares/Third_Party/mbedTLS/library \
 

@@ -50,9 +50,9 @@ void mqtt_connect_netconn(void){
    // Resolve broker hostname
    ip_addr_t server_ip;
 
-   	    IP4_ADDR(&server_ip, 18,195,150,147);
+   	    //IP4_ADDR(&server_ip, 18,195,150,147);
    	    //IP4_ADDR(&server_ip, 192,168,1,21);
-
+   err_t err= netconn_gethostbyname("broker.hivemq.com", &server_ip);
    	    // Initialize network
    	    network.conn = netconn_new(NETCONN_TCP);
 			if (!network.conn) {

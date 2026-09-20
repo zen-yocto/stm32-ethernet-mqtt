@@ -13,6 +13,10 @@
 #include "lwip/ip_addr.h"     // for IP4_ADDR() macros
 #include "lwip/netif.h"       // for struct netif, netif_add()
 #include "lwip/tcpip.h"       // for tcpip_init(), tcpip_input()
+#if(LWIP_DHCP)
+#include "lwip/dhcp.h"       // for tcpip_init(), tcpip_input()
+#endif
+#include "lwip/dns.h"       // for tcpip_init(), tcpip_input()
 #include "tcp_test.h"
 #include "rtos_resources.h"
 SemaphoreHandle_t txSemaphore;
@@ -35,10 +39,15 @@ extern uint8_t myMAC[MAC_ADDRESS_BYTES_NUM];
 void Ethernet_Task(void *argument)
 {
 	ip4_addr_t ipaddr, netmask, gw;
-	IP4_ADDR(&ipaddr, 192,168,1,57);
-	IP4_ADDR(&netmask, 255,255,255,0);
-	IP4_ADDR(&gw, 192,168,1,1);
-
+#if(LWIP_DHCP)
+	IP4_ADDR(&ipaddr, 0,0,0,0);
+	IP4_ADDR(&netmask, 0,0,0,0);
+	IP4_ADDR(&gw, 0,0,0,0);
+#else
+		IP4_ADDR(&ipaddr, 192,168,1,57);
+		IP4_ADDR(&netmask, 255,255,255,0);
+		IP4_ADDR(&gw, 192,168,1,1);
+#endif
 	tcpip_init(NULL, NULL);
 
 
@@ -46,6 +55,11 @@ void Ethernet_Task(void *argument)
 	 xSemaphoreGive(txSemaphore);
 	netif_add(&gnetif, &ipaddr, &netmask, &gw, NULL,
 	          &ENC28J60_Init, &tcpip_input);
+//	 netif_add(&gnetif,
+//	               NULL, NULL, NULL,   // ipaddr, netmask, gw = NULL for DHCP
+//	               NULL,
+//	               &ENC28J60_Init,
+//	               &tcpip_input);
 	 gnetif.hwaddr_len = 6;
 		    memcpy(gnetif.hwaddr, myMAC, 6);
 
@@ -61,15 +75,21 @@ void Ethernet_Task(void *argument)
 
 	netif_set_default(&gnetif);
 	netif_set_up(&gnetif);
+#if(LWIP_DHCP)
+	dhcp_start(&gnetif);
+#endif
 	 netif_set_link_up(&gnetif);
 	//netif_set_link_callback(&gnetif, link_callback);
 	//netif_set_status_callback(&gnetif, status_callback);
-
+	 ip_addr_t dnsserver;
+	 IP4_ADDR(&dnsserver, 8,8,8,8);   // Google DNS
+	 dns_setserver(0, &dnsserver);
 	//ENC28J60_Init();
 	//WriteControlReg(EIE, EIR_PKTIF_BIT | EIR_RXERIF_BIT | EIR_TXIF_BIT);
 	 /* USER CODE BEGIN 5 */
 	    /* Infinite loop */
 	    //Let ENC28J60 startup
+
 	uint8_t rev=0;
 	rev = ReadControlReg(EREVID);
 	uint16_t phstat2=0;
@@ -79,7 +99,7 @@ void Ethernet_Task(void *argument)
 	// Set TXIE bit in EIE
 
 	WriteControlReg(EIE, EIE_INTIE | EIE_PKTIE | EIE_TXIE| EIE_TXERIE|EIE_RXERIE);
-
+	//BitFieldSet(EIE, 0x80);
 
    // sendGratuitousARP();
 	for(;;){
@@ -87,20 +107,19 @@ void Ethernet_Task(void *argument)
 		  //  ENC28J60_TestSend();
 		    // Now process the frame
 
-
 //		ENC28J60_TestSend();
 	    uint8_t eir     = ReadControlReg(EIR);
 	    if(eir) ethernet_irq_handler();
-	    uint8_t eie     = ReadControlReg(EIE);
+//	    uint8_t eie     = ReadControlReg(EIE);
 	    uint8_t estat   = ReadControlReg(ESTAT);
 	    uint8_t econ1   = ReadControlReg(ECON1);
-	    uint8_t econ2   = ReadControlReg(ECON2);
-	    uint8_t pktcnt  = ReadControlReg(EPKTCNT);
-	    uint8_t macon3 = ReadControlReg(MACON3);
-	    uint16_t phstat1 = ReadPhyReg(PHSTAT1);
-	    uint16_t phstat2 = ReadPhyReg(PHSTAT2);
+//	    uint8_t econ2   = ReadControlReg(ECON2);
+//	    uint8_t pktcnt  = ReadControlReg(EPKTCNT);
+//	    uint8_t macon3 = ReadControlReg(MACON3);
+//	    uint16_t phstat1 = ReadPhyReg(PHSTAT1);
+//	    uint16_t phstat2 = ReadPhyReg(PHSTAT2);
 	    uint16_t phir    = ReadPhyReg(PHIR);
-	    uint16_t phie    = ReadPhyReg(PHIE);
+//	    uint16_t phie    = ReadPhyReg(PHIE);
 
 	           // If TXRTS is clear, release semaphore
 	           if (!(econ1 & ECON1_TXRTS_BIT)) {
@@ -130,15 +149,12 @@ void Ethernet_Task(void *argument)
 	        	   // CreateMQTTTask();
 	           }
 	       if(phir)
-	       WritePhyReg(PHIR, 0x10);
+	      WritePhyReg(PHIR, 0x10);
 	       BitFieldSet(EIE, 0x80);
-	       if (irq_rec){
 
+	       if (irq_rec){
 	       	 if(ReadControlReg(EPKTCNT)>0){
-	       		//enc28j60_readFrame(&recieveFrame);
-	       //		BitFieldSet(ECON2, ECON2_PKTDEC_BIT);
-	       //
-	       //		sendreply(&recieveFrame);
+
 	       			struct pbuf *p = low_level_input(&gnetif);
 	       			if (p != NULL) {
 	       				if (gnetif.input(p, &gnetif) != ERR_OK) {

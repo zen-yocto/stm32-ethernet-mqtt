@@ -396,7 +396,7 @@ err_t ENC28J60_Init();
 void ENC28J60_StartReceiving();
 void SetCS(ENC28J60_CS_State state);
 
-void WriteBytes(uint8_t* data, uint8_t size);
+void WriteBytes(uint8_t* data, uint16_t size);
 void WriteByte(uint8_t data);
 uint8_t ReadByte(void);
 

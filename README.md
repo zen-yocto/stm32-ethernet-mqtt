@@ -1,23 +1,36 @@
 STM32F411 Secure Ethernet MQTT Client with DHT22 Sensor
+
 A robust, production-ready implementation of a TLS 1.2 secure MQTT client running on an STM32F411 microcontroller. This project integrates real-time environmental telemetry from an onboard DHT22 sensor, secures communication via mbedTLS, handles networking through the lwIP TCP/IP stack, and communicates over an ENC28J60 Ethernet module to a public MQTT broker (HiveMQ).
----
+
 🚀 Key Features
-Secure TLS 1.2 Connections: Fully implements cryptographic handshakes using `mbedTLS`.
+
+Secure TLS 1.2 Connections: Fully implements cryptographic handshakes using mbedTLS.
+
 Multi-CA Trust Store: Bundles multiple global Root CAs (Amazon Root CA 1, Let's Encrypt ISRG Root X1, and DigiCert Global Root CA) into a single flash context to ensure resilience against broker certificate rotations.
+
 Real-time Environmental Telemetry: Polls temperature and humidity data from an integrated DHT22 sensor and publishes structured payloads securely to public brokers.
+
 Resilient Network Initialization: Features a non-blocking, non-halting DNS retry loop via lwIP to cleanly resolve broker endpoints and prevent bad or garbage IP assignments.
-Robust Error Handling & Flow Control: Clean separation of success and failure paths with explicit error codes mapped in hexadecimal (e.g., `-0xXXXX`) for rapid hardware debugging.
+
+Robust Error Handling & Flow Control: Clean separation of success and failure paths with explicit error codes mapped in hexadecimal (e.g., -0xXXXX) for rapid hardware debugging.
+
 Real-time Telemetry Logging: Streamlined diagnostic outputs and structured status reporting over UART.
----
+
 🛠️ Hardware Requirements
+
 Microcontroller: STM32F411 Nucleo Board (or custom STM32F411CE/RE core).
+
 Ethernet Module: ENC28J60 Standalone Ethernet Controller (SPI interface).
+
 Sensor: DHT22 (AM2302) Digital Temperature and Humidity Sensor.
+
 Interconnect Wiring:
+
 SPI lines connected to the ENC28J60 (SCK, MISO, MOSI, CS).
+
 DHT22 Data pin connected to a designated GPIO pin with a pull-up resistor.
+
 RJ45 Ethernet cable connected to a local router with active DHCP/Internet access.
----
 ⚙️ Core Implementation Highlights
 1. Multi-CA Trust Parsing
 To ensure your device never drops connections due to issuer shifts, multiple root certificates are chain-parsed into the shared `mbedtls_x509_crt` structure:

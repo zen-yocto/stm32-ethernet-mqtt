@@ -10,9 +10,9 @@
 ../Middlewares/Third_Party/mbedTLS/library/md.c:253:5:mbedtls_md_update	24	static
 ../Middlewares/Third_Party/mbedTLS/library/md.c:261:5:mbedtls_md_finish	16	static
 ../Middlewares/Third_Party/mbedTLS/library/md.c:269:5:mbedtls_md	24	static
-../Middlewares/Third_Party/mbedTLS/library/md.c:319:5:mbedtls_md_hmac_starts	104	static
+../Middlewares/Third_Party/mbedTLS/library/md.c:319:5:mbedtls_md_hmac_starts	72	static
 ../Middlewares/Third_Party/mbedTLS/library/md.c:366:5:mbedtls_md_hmac_update	24	static
-../Middlewares/Third_Party/mbedTLS/library/md.c:374:5:mbedtls_md_hmac_finish	88	static
+../Middlewares/Third_Party/mbedTLS/library/md.c:374:5:mbedtls_md_hmac_finish	56	static
 ../Middlewares/Third_Party/mbedTLS/library/md.c:398:5:mbedtls_md_hmac_reset	24	static
 ../Middlewares/Third_Party/mbedTLS/library/md.c:414:5:mbedtls_md_hmac	40	static
 ../Middlewares/Third_Party/mbedTLS/library/md.c:443:5:mbedtls_md_process	16	static

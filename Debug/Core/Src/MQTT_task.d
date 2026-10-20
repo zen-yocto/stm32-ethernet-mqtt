@@ -56,7 +56,33 @@ Core/Src/MQTT_task.o: ../Core/Src/MQTT_task.c ../Core/Src/defines.h \
  D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/inet.h \
  D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/errno.h \
  D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/err.h \
- D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/sys.h
+ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/sys.h \
+ ../Middlewares/Third_Party/mbedTLS/include/mbedtls/net_sockets.h \
+ ../MBEDTLS/App/mbedtls_config.h \
+ ../Middlewares/Third_Party/mbedTLS/include/mbedtls/check_config.h \
+ ../Middlewares/Third_Party/mbedTLS/include/mbedtls/ssl.h \
+ ../Middlewares/Third_Party/mbedTLS/include/mbedtls/bignum.h \
+ ../Middlewares/Third_Party/mbedTLS/include/mbedtls/ecp.h \
+ ../Middlewares/Third_Party/mbedTLS/include/mbedtls/ssl_ciphersuites.h \
+ ../Middlewares/Third_Party/mbedTLS/include/mbedtls/pk.h \
+ ../Middlewares/Third_Party/mbedTLS/include/mbedtls/md.h \
+ ../Middlewares/Third_Party/mbedTLS/include/mbedtls/rsa.h \
+ ../Middlewares/Third_Party/mbedTLS/include/mbedtls/ecdsa.h \
+ ../Middlewares/Third_Party/mbedTLS/include/mbedtls/cipher.h \
+ ../Middlewares/Third_Party/mbedTLS/include/mbedtls/platform_util.h \
+ ../Middlewares/Third_Party/mbedTLS/include/mbedtls/x509_crt.h \
+ ../Middlewares/Third_Party/mbedTLS/include/mbedtls/x509.h \
+ ../Middlewares/Third_Party/mbedTLS/include/mbedtls/asn1.h \
+ ../Middlewares/Third_Party/mbedTLS/include/mbedtls/x509_crl.h \
+ ../Middlewares/Third_Party/mbedTLS/include/mbedtls/ecdh.h \
+ ../Middlewares/Third_Party/mbedTLS/include/mbedtls/ssl.h \
+ ../Middlewares/Third_Party/mbedTLS/include/mbedtls/entropy.h \
+ ../Middlewares/Third_Party/mbedTLS/include/mbedtls/sha256.h \
+ ../Middlewares/Third_Party/mbedTLS/include/mbedtls/ctr_drbg.h \
+ ../Middlewares/Third_Party/mbedTLS/include/mbedtls/aes.h \
+ ../Middlewares/Third_Party/mbedTLS/include/mbedtls/certs.h \
+ ../Middlewares/Third_Party/mbedTLS/include/mbedtls/x509_crt.h \
+ ../Middlewares/Third_Party/mbedTLS/include/mbedtls/error.h
 ../Core/Src/defines.h:
 ../Core/Src/rtos_resources.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os.h:
@@ -116,3 +142,29 @@ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/ine
 D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/errno.h:
 D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/err.h:
 D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/sys.h:
+../Middlewares/Third_Party/mbedTLS/include/mbedtls/net_sockets.h:
+../MBEDTLS/App/mbedtls_config.h:
+../Middlewares/Third_Party/mbedTLS/include/mbedtls/check_config.h:
+../Middlewares/Third_Party/mbedTLS/include/mbedtls/ssl.h:
+../Middlewares/Third_Party/mbedTLS/include/mbedtls/bignum.h:
+../Middlewares/Third_Party/mbedTLS/include/mbedtls/ecp.h:
+../Middlewares/Third_Party/mbedTLS/include/mbedtls/ssl_ciphersuites.h:
+../Middlewares/Third_Party/mbedTLS/include/mbedtls/pk.h:
+../Middlewares/Third_Party/mbedTLS/include/mbedtls/md.h:
+../Middlewares/Third_Party/mbedTLS/include/mbedtls/rsa.h:
+../Middlewares/Third_Party/mbedTLS/include/mbedtls/ecdsa.h:
+../Middlewares/Third_Party/mbedTLS/include/mbedtls/cipher.h:
+../Middlewares/Third_Party/mbedTLS/include/mbedtls/platform_util.h:
+../Middlewares/Third_Party/mbedTLS/include/mbedtls/x509_crt.h:
+../Middlewares/Third_Party/mbedTLS/include/mbedtls/x509.h:
+../Middlewares/Third_Party/mbedTLS/include/mbedtls/asn1.h:
+../Middlewares/Third_Party/mbedTLS/include/mbedtls/x509_crl.h:
+../Middlewares/Third_Party/mbedTLS/include/mbedtls/ecdh.h:
+../Middlewares/Third_Party/mbedTLS/include/mbedtls/ssl.h:
+../Middlewares/Third_Party/mbedTLS/include/mbedtls/entropy.h:
+../Middlewares/Third_Party/mbedTLS/include/mbedtls/sha256.h:
+../Middlewares/Third_Party/mbedTLS/include/mbedtls/ctr_drbg.h:
+../Middlewares/Third_Party/mbedTLS/include/mbedtls/aes.h:
+../Middlewares/Third_Party/mbedTLS/include/mbedtls/certs.h:
+../Middlewares/Third_Party/mbedTLS/include/mbedtls/x509_crt.h:
+../Middlewares/Third_Party/mbedTLS/include/mbedtls/error.h:

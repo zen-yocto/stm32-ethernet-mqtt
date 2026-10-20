@@ -27,6 +27,7 @@ Core/Src/enc28j60.o: ../Core/Src/enc28j60.c ../Core/Src/enc28j60.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h \
+ ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h \
  D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/err.h \
  D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/arch.h \
  D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/arch/cc.h \
@@ -77,6 +78,7 @@ Core/Src/enc28j60.o: ../Core/Src/enc28j60.c ../Core/Src/enc28j60.h \
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h:
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h:
 D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/err.h:
 D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/arch.h:
 D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/arch/cc.h:

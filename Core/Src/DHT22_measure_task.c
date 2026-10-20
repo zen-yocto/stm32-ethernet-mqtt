@@ -27,12 +27,12 @@ void DHT22_Task(void *argument)
 	 for(;;){
 		if (DHT_Read(&dht22_measure.temp, &dht22_measure.humid) == 0)
 			{
-			  printf("Temp: %.1f C, Hum: %.1f %%\n", dht22_measure.temp, dht22_measure.humid);
+			  printf("Temp: %.1f C, Hum: %.1f %%\r\n", dht22_measure.temp, dht22_measure.humid);
 			  dht22_measure.good_data_count++;
 				  }
 					  else
 					  {
-						  printf("DHT22 read error\n");
+						  printf("DHT22 read error\r\n");
 						  dht22_measure.error_counter++;
 
 					  }

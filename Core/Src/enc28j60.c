@@ -410,86 +410,163 @@ void ethernet_irq_handler(void) {
     }
 
 }
-uint8_t is_mqtt =0;
-void enc28j60_parseFrame(ENC28J60_Frame *f, const uint8_t *buf, uint16_t len)
+uint8_t is_tls_server_hello_done = 0;
+
+void enc28j60_parseFrame(ENC28J60_Frame *f, const uint8_t *buf_parse, uint16_t len)
 {
-    const uint8_t *ptr = buf;
+    // Minimum Ethernet frame length check
+    if (len < 14) return;
 
-    // --- ENC28J60 RX header ---
+    // --- Ethernet header (Offset 0..13) ---
+    memcpy(f->destMAC, buf_parse, 6);
+    memcpy(f->srcMAC,  buf_parse + 6, 6);
+    f->etherType = (buf_parse[12] << 8) | buf_parse[13];
 
-    // --- Ethernet header ---
-    memcpy(f->destMAC, ptr, 6); ptr += 6;
-    memcpy(f->srcMAC,  ptr, 6); ptr += 6;
-    f->etherType = (ptr[0] << 8) | ptr[1]; ptr += 2;
-
-    // --- ARP ---
+    // --- ARP (EtherType 0x0806) ---
     if (f->etherType == 0x0806 && len >= 42) {
-        f->arp.hwType    = (ptr[0] << 8) | ptr[1];
-        f->arp.protoType = (ptr[2] << 8) | ptr[3];
-        f->arp.hwSize    = ptr[4];
-        f->arp.protoSize = ptr[5];
-        f->arp.opcode    = (ptr[6] << 8) | ptr[7];
-        memcpy(f->arp.senderMAC, ptr+8, 6);
-        memcpy(f->arp.senderIP,  ptr+14, 4);
-        memcpy(f->arp.targetMAC, ptr+18, 6);
-        memcpy(f->arp.targetIP,  ptr+24, 4);
-        ptr += 28;
+        f->arp.hwType    = (buf_parse[14] << 8) | buf_parse[15];
+        f->arp.protoType = (buf_parse[16] << 8) | buf_parse[17];
+        f->arp.hwSize    = buf_parse[18];
+        f->arp.protoSize = buf_parse[19];
+        f->arp.opcode    = (buf_parse[20] << 8) | buf_parse[21];
+        memcpy(f->arp.senderMAC, buf_parse + 22, 6);
+        memcpy(f->arp.senderIP,  buf_parse + 28, 4);
+        memcpy(f->arp.targetMAC, buf_parse + 32, 6);
+        memcpy(f->arp.targetIP,  buf_parse + 38, 4);
     }
 
-    // --- IPv4 ---
+    // --- IPv4 (EtherType 0x0800) ---
     else if (f->etherType == 0x0800 && len >= 34) {
-        f->ip.version_ihl    = ptr[0];
-        f->ip.tos            = ptr[1];
-        f->ip.totalLength    = (ptr[2] << 8) | ptr[3];
-        f->ip.identification = (ptr[4] << 8) | ptr[5];
-        f->ip.flags_fragment = (ptr[6] << 8) | ptr[7];
-        f->ip.ttl            = ptr[8];
-        f->ip.protocol       = ptr[9];
-        f->ip.headerChecksum = (ptr[10] << 8) | ptr[11];
-        memcpy(f->ip.srcIP, ptr+12, 4);
-        memcpy(f->ip.dstIP, ptr+16, 4);
-        uint8_t ip_header_len = (f->ip.version_ihl & 0x0F) * 4;
-        uint16_t payload_len  = f->ip.totalLength - ip_header_len;
-        ptr += ip_header_len;  // move pointer to start of payload
-        memcpy(f->data, ptr, payload_len);
-        // --- UDP ---
-        if (f->ip.protocol == 0x11 && len >= 42) {
-            f->udp.srcPort  = (ptr[0] << 8) | ptr[1];
-            f->udp.dstPort  = (ptr[2] << 8) | ptr[3];
-            f->udp.length   = (ptr[4] << 8) | ptr[5];
-            f->udp.checksum = (ptr[6] << 8) | ptr[7];
-            ptr += 8;
+        f->ip.version_ihl    = buf_parse[14];
+        f->ip.tos            = buf_parse[15];
+        f->ip.totalLength    = (buf_parse[16] << 8) | buf_parse[17]; // Host byte order
+        f->ip.identification = (buf_parse[18] << 8) | buf_parse[19];
+        f->ip.flags_fragment = (buf_parse[20] << 8) | buf_parse[21];
+        f->ip.ttl            = buf_parse[22];
+        f->ip.protocol       = buf_parse[23];
+        f->ip.headerChecksum = (buf_parse[24] << 8) | buf_parse[25];
+        memcpy(f->ip.srcIP, buf_parse + 26, 4);
+        memcpy(f->ip.dstIP, buf_parse + 30, 4);
 
-            uint16_t dataLen = f->udp.length - 8;
-            if (dataLen > sizeof(f->data)) dataLen = sizeof(f->data);
-            memcpy(f->data, ptr, dataLen);
+        // Calculate dynamic IP header length (IHL is in 32-bit words)
+        uint8_t ip_header_len = (f->ip.version_ihl & 0x0F) * 4;
+        if (ip_header_len < 20) ip_header_len = 20; // Fallback sanity check
+
+        // Calculate offset to IP payload and its length
+        uint16_t ip_payload_offset = 14 + ip_header_len;
+        int32_t payload_len = (int32_t)f->ip.totalLength - ip_header_len;
+
+        if (payload_len > 0 && len >= ip_payload_offset) {
+            uint16_t copy_len = (payload_len > sizeof(f->data)) ? sizeof(f->data) : (uint16_t)payload_len;
+            memcpy(f->data, buf_parse + ip_payload_offset, copy_len);
         }
 
-        // --- TCP (for MQTT detection) ---
-        else if (f->ip.protocol == 0x06) {
-            // Typical offsets: Ethernet (14) + IP (20) + TCP (20)
-            const uint8_t *tcp_payload = buf + 14 + 20 + 20;
-            uint8_t mqtt_type = tcp_payload[0];
-            f->data[0] = mqtt_type; // store first byte for inspection
+        // --- UDP (Protocol 0x11) ---
+        if (f->ip.protocol == 0x11 && len >= (ip_payload_offset + 8)) {
+            const uint8_t *udp_ptr = buf_parse + ip_payload_offset;
 
+            f->udp.srcPort  = (udp_ptr[0] << 8) | udp_ptr[1];
+            f->udp.dstPort  = (udp_ptr[2] << 8) | udp_ptr[3];
+            f->udp.length   = (udp_ptr[4] << 8) | udp_ptr[5];
+            f->udp.checksum = (udp_ptr[6] << 8) | udp_ptr[7];
 
-            if ((mqtt_type & 0xF0) == 0x10 ||  // CONNECT
-                (mqtt_type & 0xF0) == 0x20 ||  // CONNACK
-                (mqtt_type & 0xF0) == 0x30 ||  // PUBLISH
-                (mqtt_type & 0xF0) == 0x80 ||  // SUBSCRIBE
-                (mqtt_type & 0xF0) == 0x90 ||  // SUBACK
-                (mqtt_type & 0xF0) == 0xC0 ||  // PINGREQ
-                (mqtt_type & 0xF0) == 0xD0 ||  // PINGRESP
-                (mqtt_type & 0xF0) == 0xE0) {
-             is_mqtt = 1;
+            int32_t dataLen = (int32_t)f->udp.length - 8;
+            if (dataLen > 0) {
+                uint16_t copy_len = (dataLen > sizeof(f->data)) ? sizeof(f->data) : (uint16_t)dataLen;
+                memcpy(f->data, udp_ptr + 8, copy_len);
+            }
+        }
+
+        // --- TCP (Protocol 0x06 for MQTTS / TLS & Raw MQTT detection) ---
+        else if (f->ip.protocol == 0x06 && len >= (ip_payload_offset + 20)) {
+            const uint8_t *tcp_ptr = buf_parse + ip_payload_offset;
+
+            // Extract dynamic TCP Header Length (Data Offset field in upper 4 bits of byte 12)
+            uint8_t tcp_header_len = ((tcp_ptr[12] >> 4) & 0x0F) * 4;
+            if (tcp_header_len < 20) tcp_header_len = 20; // Default TCP header size
+
+            // Calculate pointer to TCP Payload
+            const uint8_t *tcp_payload = tcp_ptr + tcp_header_len;
+
+            // Calculate TCP payload length
+            int32_t tcp_payload_len = (int32_t)f->ip.totalLength - (int32_t)ip_header_len - (int32_t)tcp_header_len;
+
+            if (tcp_payload_len > 0) {
+                // Reset flags for current packet inspection
+                uint8_t is_mqtt = 0;
+                uint8_t is_tls_key_exchange = 0;
+                uint8_t is_tls_client_key_exchange = 0;
+                uint8_t is_tls_server_hello = 0;
+
+                // -------------------------------------------------------------
+                // 1. TLS RECORD / HANDSHAKE DETECTION (MQTTS Port 8883 / TLS)
+                // -------------------------------------------------------------
+                int32_t offset = 0;
+
+                // Scan through all TLS records concatenated inside this TCP segment
+                while (offset + 5 <= tcp_payload_len) {
+                    uint8_t contentType  = tcp_payload[offset];     // 0x16 = Handshake
+                    uint8_t majorVersion = tcp_payload[offset + 1]; // 0x03 (TLS)
+                    uint16_t recordLen   = (tcp_payload[offset + 3] << 8) | tcp_payload[offset + 4];
+
+                    if (contentType == 0x16 && majorVersion == 0x03) {
+                        if (offset + 5 < tcp_payload_len) {
+                            uint8_t handshakeType = tcp_payload[offset + 5]; // First byte of Handshake payload
+                            f->data[0] = handshakeType; // Store type
+
+                            if (handshakeType == 0x02) {        // Server Hello
+                                is_tls_server_hello = 1;
+                            }
+                            else if (handshakeType == 0x0C) {   // Server Key Exchange
+                                is_tls_key_exchange = 1;
+                            }
+                            else if (handshakeType == 0x10) {   // Client Key Exchange
+                                is_tls_client_key_exchange = 1;
+                            }
+                            else if (handshakeType == 0x0E) {   // Server Hello Done (0x0E)
+                                is_tls_server_hello_done = 1;
+
+                                // STOP PARSING IMMEDIATELY WHEN SERVER HELLO DONE ARRIVES
+                                return;
+                            }
+                        }
+                    }
+
+                    // Advance pointer to next TLS record inside TCP segment
+                    if (recordLen == 0) break; // Avoid infinite loop
+                    offset += 5 + recordLen;
+                }
+
+                // -------------------------------------------------------------
+                // 2. UNENCRYPTED RAW MQTT DETECTION (Port 1883)
+                // -------------------------------------------------------------
+                uint8_t mqtt_type = tcp_payload[0];
+                uint8_t packet_type = mqtt_type & 0xF0;
+
+                if (packet_type == 0x10 ||  // CONNECT
+                    packet_type == 0x20 ||  // CONNACK
+                    packet_type == 0x30 ||  // PUBLISH
+                    packet_type == 0x80 ||  // SUBSCRIBE
+                    packet_type == 0x90 ||  // SUBACK
+                    packet_type == 0xC0 ||  // PINGREQ
+                    packet_type == 0xD0 ||  // PINGRESP
+                    packet_type == 0xE0) {  // DISCONNECT
+
+                    is_mqtt = 1;
+                    if (!is_tls_key_exchange && !is_tls_client_key_exchange && !is_tls_server_hello && !is_tls_server_hello_done) {
+                        f->data[0] = mqtt_type;
+                    }
+                }
             }
         }
     }
 
     // --- Optional FCS ---
     if (len >= 4) {
-        f->fcs = (buf[len-4] | (buf[len-3] << 8) |
-                  (buf[len-2] << 16) | (buf[len-1] << 24));
+        f->fcs = (uint32_t)(buf_parse[len - 4] |
+                (buf_parse[len - 3] << 8)  |
+                (buf_parse[len - 2] << 16) |
+                (buf_parse[len - 1] << 24));
     }
 }
 

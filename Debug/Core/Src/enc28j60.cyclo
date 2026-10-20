@@ -21,7 +21,7 @@
 ../Core/Src/enc28j60.c:298:7:ENC28J60_Init	2
 ../Core/Src/enc28j60.c:345:6:ENC28J60_StartReceiving	1
 ../Core/Src/enc28j60.c:353:6:ethernet_irq_handler	9
-../Core/Src/enc28j60.c:414:6:enc28j60_parseFrame	18
-../Core/Src/enc28j60.c:496:6:sendreply	5
-../Core/Src/enc28j60.c:576:6:sendGratuitousARP	1
-../Core/Src/enc28j60.c:609:6:HAL_GPIO_EXTI_Callback	2
+../Core/Src/enc28j60.c:415:6:enc28j60_parseFrame	40
+../Core/Src/enc28j60.c:573:6:sendreply	5
+../Core/Src/enc28j60.c:653:6:sendGratuitousARP	1
+../Core/Src/enc28j60.c:686:6:HAL_GPIO_EXTI_Callback	2

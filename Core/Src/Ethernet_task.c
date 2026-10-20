@@ -19,6 +19,8 @@
 #include "lwip/dns.h"       // for tcpip_init(), tcpip_input()
 #include "tcp_test.h"
 #include "rtos_resources.h"
+
+
 SemaphoreHandle_t txSemaphore;
 uint8_t MQTT_tcp_corrupt=0;
 
@@ -26,7 +28,7 @@ ENC28J60_Frame recieveFrame;
 void ENC28J60_TestSend(void);
 void sendARPReply(uint8_t *rxFrame);
 void processFrame(uint16_t len);
-
+void enc28j60_parseFrame(ENC28J60_Frame *f, const uint8_t *buf, uint16_t len);
 extern void CreateMQTTTask(void);
 struct pbuf *low_level_input(struct netif *netif);
 err_t low_level_output(struct netif *netif, struct pbuf *p);
@@ -55,11 +57,6 @@ void Ethernet_Task(void *argument)
 	 xSemaphoreGive(txSemaphore);
 	netif_add(&gnetif, &ipaddr, &netmask, &gw, NULL,
 	          &ENC28J60_Init, &tcpip_input);
-//	 netif_add(&gnetif,
-//	               NULL, NULL, NULL,   // ipaddr, netmask, gw = NULL for DHCP
-//	               NULL,
-//	               &ENC28J60_Init,
-//	               &tcpip_input);
 	 gnetif.hwaddr_len = 6;
 		    memcpy(gnetif.hwaddr, myMAC, 6);
 
@@ -142,11 +139,9 @@ void Ethernet_Task(void *argument)
 	        	       {
 	        	           BitFieldSet(ECON2, ECON2_PKTDEC_BIT);
 	        	       }
-	        	       //MQTT_tcp_corrupt=1;
-	        	     //  vTaskDelete(mqttTaskHandle);
-	        	       // 8) Re-enable RX
+
 	        	       BitFieldSet(ECON1, ECON1_RXEN_BIT);
-	        	   // CreateMQTTTask();
+
 	           }
 	       if(phir)
 	      WritePhyReg(PHIR, 0x10);
@@ -165,8 +160,7 @@ void Ethernet_Task(void *argument)
 	       	}irq_rec=0;
 
 	       	   }
-   //send_test_publish(&gnetif);
-	//  tcp_client_init();
+
 	 	osDelay(100);
 	}
 
@@ -312,7 +306,7 @@ struct pbuf *low_level_input(struct netif *netif)
 
     uint8_t dummy[4];
     ReadBufferMem(dummy, 4);
-
+  //  enc28j60_parseFrame(&frame,p->payload,p->len);  // to test incoming frame type remove from main program
     // ---------------------------------------------------------
     // A) ERXRDPT = nextPtr - 1 (with wrap)
     // ---------------------------------------------------------
@@ -333,6 +327,5 @@ struct pbuf *low_level_input(struct netif *netif)
 
     return p;
 }
-
 
 

@@ -1,7 +1,7 @@
 ../Middlewares/Third_Party/mbedTLS/include/mbedtls/pk.h:170:36:mbedtls_pk_ec	1
 ../Middlewares/Third_Party/mbedTLS/library/x509_crt.c:163:12:x509_profile_check_md_alg	3
 ../Middlewares/Third_Party/mbedTLS/library/x509_crt.c:179:12:x509_profile_check_pk_alg	3
-../Middlewares/Third_Party/mbedTLS/library/x509_crt.c:195:12:x509_profile_check_key	6
+../Middlewares/Third_Party/mbedTLS/library/x509_crt.c:195:12:x509_profile_check_key	9
 ../Middlewares/Third_Party/mbedTLS/library/x509_crt.c:233:12:x509_memcasecmp	8
 ../Middlewares/Third_Party/mbedTLS/library/x509_crt.c:262:12:x509_check_wildcard	9
 ../Middlewares/Third_Party/mbedTLS/library/x509_crt.c:298:12:x509_string_cmp	10

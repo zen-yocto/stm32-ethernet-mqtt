@@ -27,6 +27,7 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h \
+ ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h \
  ../Core/Inc/FreeRTOSConfig.h \
@@ -39,7 +40,29 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h \
  ../MBEDTLS/App/mbedtls.h ../MBEDTLS/App/mbedtls_config.h \
- ../Middlewares/Third_Party/mbedTLS/include/mbedtls/check_config.h
+ ../Middlewares/Third_Party/mbedTLS/include/mbedtls/check_config.h \
+ ../Middlewares/Third_Party/mbedTLS/include/mbedtls/ssl.h \
+ ../MBEDTLS/App/mbedtls_config.h \
+ ../Middlewares/Third_Party/mbedTLS/include/mbedtls/bignum.h \
+ ../Middlewares/Third_Party/mbedTLS/include/mbedtls/ecp.h \
+ ../Middlewares/Third_Party/mbedTLS/include/mbedtls/ssl_ciphersuites.h \
+ ../Middlewares/Third_Party/mbedTLS/include/mbedtls/pk.h \
+ ../Middlewares/Third_Party/mbedTLS/include/mbedtls/md.h \
+ ../Middlewares/Third_Party/mbedTLS/include/mbedtls/rsa.h \
+ ../Middlewares/Third_Party/mbedTLS/include/mbedtls/ecdsa.h \
+ ../Middlewares/Third_Party/mbedTLS/include/mbedtls/cipher.h \
+ ../Middlewares/Third_Party/mbedTLS/include/mbedtls/platform_util.h \
+ ../Middlewares/Third_Party/mbedTLS/include/mbedtls/x509_crt.h \
+ ../Middlewares/Third_Party/mbedTLS/include/mbedtls/x509.h \
+ ../Middlewares/Third_Party/mbedTLS/include/mbedtls/asn1.h \
+ ../Middlewares/Third_Party/mbedTLS/include/mbedtls/x509_crl.h \
+ ../Middlewares/Third_Party/mbedTLS/include/mbedtls/ecdh.h \
+ ../Middlewares/Third_Party/mbedTLS/include/mbedtls/entropy.h \
+ ../Middlewares/Third_Party/mbedTLS/include/mbedtls/sha256.h \
+ ../Middlewares/Third_Party/mbedTLS/include/mbedtls/ctr_drbg.h \
+ ../Middlewares/Third_Party/mbedTLS/include/mbedtls/aes.h \
+ ../Middlewares/Third_Party/mbedTLS/include/mbedtls/debug.h \
+ ../Middlewares/Third_Party/mbedTLS/include/mbedtls/ssl.h
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
@@ -69,6 +92,7 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h:
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h:
 ../Core/Inc/FreeRTOSConfig.h:
@@ -83,3 +107,25 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../MBEDTLS/App/mbedtls.h:
 ../MBEDTLS/App/mbedtls_config.h:
 ../Middlewares/Third_Party/mbedTLS/include/mbedtls/check_config.h:
+../Middlewares/Third_Party/mbedTLS/include/mbedtls/ssl.h:
+../MBEDTLS/App/mbedtls_config.h:
+../Middlewares/Third_Party/mbedTLS/include/mbedtls/bignum.h:
+../Middlewares/Third_Party/mbedTLS/include/mbedtls/ecp.h:
+../Middlewares/Third_Party/mbedTLS/include/mbedtls/ssl_ciphersuites.h:
+../Middlewares/Third_Party/mbedTLS/include/mbedtls/pk.h:
+../Middlewares/Third_Party/mbedTLS/include/mbedtls/md.h:
+../Middlewares/Third_Party/mbedTLS/include/mbedtls/rsa.h:
+../Middlewares/Third_Party/mbedTLS/include/mbedtls/ecdsa.h:
+../Middlewares/Third_Party/mbedTLS/include/mbedtls/cipher.h:
+../Middlewares/Third_Party/mbedTLS/include/mbedtls/platform_util.h:
+../Middlewares/Third_Party/mbedTLS/include/mbedtls/x509_crt.h:
+../Middlewares/Third_Party/mbedTLS/include/mbedtls/x509.h:
+../Middlewares/Third_Party/mbedTLS/include/mbedtls/asn1.h:
+../Middlewares/Third_Party/mbedTLS/include/mbedtls/x509_crl.h:
+../Middlewares/Third_Party/mbedTLS/include/mbedtls/ecdh.h:
+../Middlewares/Third_Party/mbedTLS/include/mbedtls/entropy.h:
+../Middlewares/Third_Party/mbedTLS/include/mbedtls/sha256.h:
+../Middlewares/Third_Party/mbedTLS/include/mbedtls/ctr_drbg.h:
+../Middlewares/Third_Party/mbedTLS/include/mbedtls/aes.h:
+../Middlewares/Third_Party/mbedTLS/include/mbedtls/debug.h:
+../Middlewares/Third_Party/mbedTLS/include/mbedtls/ssl.h:

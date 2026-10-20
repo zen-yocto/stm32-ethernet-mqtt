@@ -68,11 +68,12 @@
 /* ---------- PBUF pool ---------- */
 #define PBUF_POOL_SIZE                  12
 #define PBUF_POOL_BUFSIZE      			1524
+
 /* ---------- Statistics & debugging ---------- */
 #define LWIP_STATS                      0
 //#define LWIP_DEBUG                      0
 /*---------------TCP_IP Thread */
-#define TCPIP_THREAD_STACKSIZE   1024   // 4 KB stack
+#define TCPIP_THREAD_STACKSIZE   1024    // 4 KB stack 1024
 #define TCPIP_THREAD_PRIO       17
 /* ---------- Misc ---------- */
 #define LWIP_HAVE_LOOPIF                0

@@ -31,6 +31,7 @@ SPI lines connected to the ENC28J60 (SCK, MISO, MOSI, CS).
 DHT22 Data pin connected to a designated GPIO pin with a pull-up resistor.
 
 RJ45 Ethernet cable connected to a local router with active DHCP/Internet access.
+
 ⚙️ Core Implementation Highlights
 1. Multi-CA Trust Parsing
 To ensure your device never drops connections due to issuer shifts, multiple root certificates are chain-parsed into the shared `mbedtls_x509_crt` structure:

@@ -1,4 +1,4 @@
-# STM32F411 Ethernet Temperature/Humidity Monitor with Flex UI
+# STM32F411 Ethernet Temperature/Humidity Monitor with HTTP server, mbedTLS, MQTT Telemetry
 
 A feature-rich STM32F411 project for monitoring temperature and humidity using a DHT22 sensor, publishing telemetry over MQTT, and serving a lightweight web dashboard through an embedded HTTP server.
 

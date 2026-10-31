@@ -1,58 +1,104 @@
-STM32F411 Secure Ethernet MQTT Client with DHT22 Sensor
+# STM32F411 Ethernet Temperature/Humidity Monitor with Flex UI
 
-A robust, production-ready implementation of a TLS 1.2 secure MQTT client running on an STM32F411 microcontroller. This project integrates real-time environmental telemetry from an onboard DHT22 sensor, secures communication via mbedTLS, handles networking through the lwIP TCP/IP stack, and communicates over an ENC28J60 Ethernet module to a public MQTT broker (HiveMQ).
+A feature-rich STM32F411 project for monitoring temperature and humidity using a DHT22 sensor, publishing telemetry over MQTT, and serving a lightweight web dashboard through an embedded HTTP server. The system continuously samples environmental data, updates a local web interface, and synchronizes the latest readings in the background to an MQTT broker.
 
-🚀 Key Features
+This project is designed for embedded systems use cases where you need a low-power, connected sensor node with both local visualization and cloud publishing.
 
-Secure TLS 1.2 Connections: Fully implements cryptographic handshakes using mbedTLS.
+## Key Features
 
-Multi-CA Trust Store: Bundles multiple global Root CAs (Amazon Root CA 1, Let's Encrypt ISRG Root X1, and DigiCert Global Root CA) into a single flash context to ensure resilience against broker certificate rotations.
+- DHT22 temperature and humidity sensing
+- STM32F411 + ENC28J60 Ethernet connectivity
+- Embedded HTTP server with a responsive web UI
+- Background data sync for live temperature and humidity updates
+- MQTT publishing for cloud or broker-based telemetry forwarding
+- TCP/IP networking with lwIP
+- TLS 1.2 secure MQTT support with mbedTLS and multi-CA trust store
+- UART debugging and structured status logging
+- Non-blocking DNS retry handling and resilient network startup
+- Robust error handling and recovery flows
 
-Real-time Environmental Telemetry: Polls temperature and humidity data from an integrated DHT22 sensor and publishes structured payloads securely to public brokers.
+## Hardware Requirements
 
-Resilient Network Initialization: Features a non-blocking, non-halting DNS retry loop via lwIP to cleanly resolve broker endpoints and prevent bad or garbage IP assignments.
+- STM32F411 Nucleo board or compatible STM32F411CE/RE board
+- ENC28J60 Ethernet controller over SPI
+- DHT22 (AM2302) sensor
+- 10/100Base-T Ethernet connection to a local router or network
+- Pull-up resistor on the DHT22 data line as required by the sensor wiring
+- Optional USB-UART adapter for serial debugging
 
-Robust Error Handling & Flow Control: Clean separation of success and failure paths with explicit error codes mapped in hexadecimal (e.g., -0xXXXX) for rapid hardware debugging.
+## Wiring Overview
 
-Real-time Telemetry Logging: Streamlined diagnostic outputs and structured status reporting over UART.
+- SPI interface connected to ENC28J60: SCK, MISO, MOSI, CS
+- DHT22 data pin connected to a defined GPIO input
+- Ethernet RJ45 cable connected to a LAN with DHCP or a configured static IP
+- Serial UART connected to a PC at 115200 baud for logs and diagnostics
 
-🛠️ Hardware Requirements
+## System Overview
 
-Microcontroller: STM32F411 Nucleo Board (or custom STM32F411CE/RE core).
+The firmware performs the following tasks concurrently:
 
-Ethernet Module: ENC28J60 Standalone Ethernet Controller (SPI interface).
+1. Reads temperature and humidity from the DHT22 sensor.
+2. Stores the latest sensor values in memory and updates the UI state.
+3. Serves an HTTP page from the STM32 board to allow local monitoring in a browser.
+4. Runs a background synchronization loop to periodically push the latest telemetry to an MQTT broker.
+5. Maintains network connectivity through retry logic and watchdog-friendly error handling.
 
-Sensor: DHT22 (AM2302) Digital Temperature and Humidity Sensor.
+This gives you both a local web dashboard and remote data forwarding without requiring a separate host computer.
 
-Interconnect Wiring:
+## Web Interface
 
-SPI lines connected to the ENC28J60 (SCK, MISO, MOSI, CS).
+The embedded HTTP server hosts a small responsive Flex-based web UI that displays:
 
-DHT22 Data pin connected to a designated GPIO pin with a pull-up resistor.
+- Current temperature
+- Current humidity
+- Refresh/update status
+- Connection state
+- Recent telemetry or last sync timestamp
 
-RJ45 Ethernet cable connected to a local router with active DHCP/Internet access.
+The UI is intentionally lightweight and optimized for embedded resources, making it suitable for local monitoring without a powerful external web stack.
 
-⚙️ Core Implementation Highlights
-1. Multi-CA Trust Parsing
-To ensure your device never drops connections due to issuer shifts, multiple root certificates are chain-parsed into the shared `mbedtls_x509_crt` structure:
+## Background Sync Behavior
+
+The project includes a background synchronization routine that continuously updates the temperature and humidity values and sends them to the configured broker in the background. This ensures that the system remains responsive while telemetry continues to stream even when the UI is being accessed or when the device is actively serving HTTP pages.
+
+Typical synchronization flow:
+
+- Read sensor values
+- Validate and filter the data
+- Update local state
+- Publish data to MQTT broker or queue it for transfer
+- Refresh dashboard values for the current web session
+
+## MQTT and Secure Connectivity
+
+The firmware includes secure communication support using mbedTLS for MQTT over TLS 1.2. The project includes a bundled CA trust store so it can validate server certificates from commonly used public brokers.
+
+Example trust configuration:
+
 ```c
 mbedtls_x509_crt_parse(&cert, (const unsigned char*) amazon_root_ca1, strlen(amazon_root_ca1) + 1);
 mbedtls_x509_crt_parse(&cert, (const unsigned char*) letsencrypt_root_x1, strlen(letsencrypt_root_x1) + 1);
 mbedtls_x509_crt_parse(&cert, (const unsigned char*) digicert_root_ca, strlen(digicert_root_ca) + 1);
 mbedtls_ssl_conf_ca_chain(&conf, &cert, NULL);
 ```
-2. Resilient DNS Resolution Loop
-Protects against boot-up timing race conditions where the Ethernet link or router DHCP takes a few seconds to negotiate:
+
+## Network Initialization
+
+The board uses lwIP and includes a resilient DNS loop to avoid failures during startup when the Ethernet link or router has not fully initialized yet.
+
 ```c
 do {
     dns_err = netconn_gethostbyname("broker.hivemq.com", &server_ip);
     if (dns_err != ERR_OK) {
-        vTaskDelay(pdMS_TO_TICKS(2000)); // Non-blocking OS delay
+        vTaskDelay(pdMS_TO_TICKS(2000));
     }
 } while (dns_err != ERR_OK);
 ```
-3. Telemetry Formatting & Log Console
-Once connected, telemetry read from the DHT22 is formatted cleanly:
+
+## Telemetry Logging
+
+Telemetry is exposed over UART to aid in debugging and verification of sensor readings, network state, MQTT status, and HTTP server operations.
+
 ```c
 printf("Data published successfully!\r\n"
        "  - Temperature: %.1f °C\r\n"
@@ -64,13 +110,52 @@ printf("Data published successfully!\r\n"
        MQTT_data.error_counter,
        MQTT_data.good_data_count);
 ```
----
-🚀 Getting Started & Building
-Clone the Repository:
+
+## Project Structure
+
+- `Core/` — main firmware and application logic
+- `Drivers/` — hardware abstraction and peripheral drivers
+- `Middlewares/` — lwIP and related networking middleware
+- `TLS/` — certificate and secure MQTT configuration
+- `HTTP/` — embedded web server and UI assets
+- `README.md` — project documentation
+
+## Getting Started
+
+1. Clone the repository:
+
 ```bash
-   git clone https://github.com/zen-yocto/stm32-ethernet-mqtt.git
-   ```
-Open the Project: Import the workspace into STM32CubeIDE or your preferred ARM-GCC toolchain environment.
-Configure Network Parameters: Adjust static IP configurations in `main.c` if you are not using DHCP.
-Compile & Flash: Build the project and flash your STM32F411 board.
-Monitor Serial Output: Open your serial terminal (e.g., PuTTY, TeraTerm) at `115200 baud` to view real-time DNS status, TLS handshake execution codes, and telemetry message logs.
+git clone https://github.com/zen-yocto/stm32-ethernet-mqtt.git
+```
+
+2. Open the project in STM32CubeIDE or your preferred ARM-GCC development environment.
+
+3. Configure the board and network settings:
+   - Ethernet IP mode (DHCP or static)
+   - MQTT broker address and port
+   - TLS certificate settings if required
+   - DHT22 GPIO pin and sensor configuration
+
+4. Build and flash the firmware to your STM32F411 board.
+
+5. Connect the board to the local network and power it on.
+
+6. Open the embedded web UI in a browser using the board's IP address.
+
+7. Monitors logs over UART at 115200 baud for debugging and telemetry status.
+
+## Example Use Cases
+
+- Remote environmental monitoring in a lab or workshop
+- Indoor climate monitoring for smart building prototypes
+- Embedded sensor dashboards with local HTTP access
+- MQTT telemetry for IoT dashboards and data collection systems
+- Educational platform for STM32 networking, telemetry, and UI development
+
+## Notes
+
+This project combines embedded networking, sensor acquisition, secure cloud connectivity, and a lightweight local UI in a single STM32-based firmware. The HTTP server and Flex-based dashboard are designed to provide immediate visibility into current conditions while the background synchronization keeps telemetry flowing to the broker without interrupting normal operations.
+
+## License
+
+This project is provided as-is for educational and prototyping use. Update the license text as needed for your deployment or commercial usage.

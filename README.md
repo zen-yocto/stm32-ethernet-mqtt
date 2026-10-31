@@ -79,15 +79,7 @@ The stack is designed to be dependable on constrained hardware, with retry loops
 
 ## Background Sync Behavior
 
-The project includes a background synchronization routine that continuously updates the temperature and humidity values and sends them to the configured broker in the background. This ensures that sensor data remains available for both local viewing and remote cloud forwarding.
-
-Typical synchronization flow:
-
-- Read sensor values
-- Validate and filter the data
-- Update local state
-- Publish data to MQTT broker or queue it for transfer
-- Refresh dashboard values for the current web session
+The project includes a background synchronization routine that continuously updates the temperature and humidity values on http client using javascript
 
 ## MQTT and Secure Connectivity
 

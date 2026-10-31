@@ -22,6 +22,7 @@
 ../Middlewares/Third_Party/lwIP/src/api/api_msg.c:1453:1:lwip_netconn_do_listen	32	static
 ../Middlewares/Third_Party/lwIP/src/api/api_msg.c:1536:1:lwip_netconn_do_send	24	static
 ../Middlewares/Third_Party/lwIP/src/api/api_msg.c:1593:1:lwip_netconn_do_recv	32	static
+../Middlewares/Third_Party/lwIP/src/api/api_msg.c:1618:1:lwip_netconn_do_accepted	24	static
 ../Middlewares/Third_Party/lwIP/src/api/api_msg.c:1644:1:lwip_netconn_do_writemore	40	static
 ../Middlewares/Third_Party/lwIP/src/api/api_msg.c:1817:1:lwip_netconn_do_write	24	static
 ../Middlewares/Third_Party/lwIP/src/api/api_msg.c:1871:1:lwip_netconn_do_getaddr	24	static

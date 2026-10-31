@@ -1,7 +1,7 @@
 #ifndef LWIP_HTTPD_STRUCTS_H
 #define LWIP_HTTPD_STRUCTS_H
 
-#include "../../include/lwip/apps/httpd.h"
+#include "lwip/apps/httpd.h"
 
 #if LWIP_HTTPD_DYNAMIC_HEADERS
 /** This struct is used for a list of HTTP header strings for various
@@ -113,11 +113,11 @@ static const tHTTPHeader g_psHTTPHeaders[] = {
 
 #endif /* LWIP_HTTPD_DYNAMIC_HEADERS */
 
-#if LWIP_HTTPD_SSI && LWIP_HTTPD_SSI_BY_FILE_EXTENSION
+#if LWIP_HTTPD_SSI
 static const char *const g_pcSSIExtensions[] = {
-  LWIP_HTTPD_SSI_EXTENSIONS
+  ".shtml", ".shtm", ".ssi", ".xml", ".json"
 };
 #define NUM_SHTML_EXTENSIONS LWIP_ARRAYSIZE(g_pcSSIExtensions)
-#endif /* LWIP_HTTPD_SSI && LWIP_HTTPD_SSI_BY_FILE_EXTENSION */
+#endif /* LWIP_HTTPD_SSI */
 
 #endif /* LWIP_HTTPD_STRUCTS_H */

@@ -1,7 +1,7 @@
-../Core/Src/DHT22_measure_task.c:23:6:DHT22_Task	4
-../Core/Src/DHT22_measure_task.c:56:8:CreateDHT22Task	1
-../Core/Src/DHT22_measure_task.c:68:6:Delay_us	2
-../Core/Src/DHT22_measure_task.c:74:6:DHT_SetPinOutput	1
-../Core/Src/DHT22_measure_task.c:84:6:DHT_SetPinInput	1
-../Core/Src/DHT22_measure_task.c:92:9:DHT_ReadByte	6
-../Core/Src/DHT22_measure_task.c:117:9:DHT_Read	7
+../Core/Src/DHT22_measure_task.c:24:6:DHT22_Task	5
+../Core/Src/DHT22_measure_task.c:65:8:CreateDHT22Task	1
+../Core/Src/DHT22_measure_task.c:77:6:Delay_us	2
+../Core/Src/DHT22_measure_task.c:83:6:DHT_SetPinOutput	1
+../Core/Src/DHT22_measure_task.c:93:6:DHT_SetPinInput	1
+../Core/Src/DHT22_measure_task.c:101:9:DHT_ReadByte	6
+../Core/Src/DHT22_measure_task.c:126:9:DHT_Read	7

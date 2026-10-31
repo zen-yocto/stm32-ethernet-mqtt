@@ -36,7 +36,7 @@
 #define NO_SYS                          0   /* Using FreeRTOS */
 #define SYS_LIGHTWEIGHT_PROT            1   /* Enable lightweight protection */
 #define LWIP_NETCONN                    1   /* Enable Netconn API */
-#define LWIP_SOCKET                     1   /* Enable Socket API */
+#define LWIP_SOCKET                     0   /* Enable Socket API */
 
 /* ---------- Protocols ---------- */
 #define LWIP_IPV6                       0   /* IPv4 only */
@@ -47,6 +47,7 @@
 #define LWIP_DHCP                       0   /* Enable DHCP */
 #define LWIP_DNS                        1   /* Enable DNS resolver */
 #define LWIP_HTTPD						0
+
 /* ---------- Memory pools ---------- */
 #define MEM_ALIGNMENT                   4
 #define MEM_SIZE                        8192   /* 8 KB heap for lwIP */
@@ -55,16 +56,19 @@
 #define MEMP_NUM_UDP_PCB                4
 #define MEMP_NUM_TCP_SEG                25
 #define MEMP_NUM_SYS_TIMEOUT            10
-
+#define MEMP_NUM_TCP_PCB_LISTEN         2   //for server mode
+#define MEMP_NUM_NETCONN                4      /* Total Netconn slots (MQTT client + Server listen + Server client) */
+#define TCP_LISTEN_BACKLOG              1      /* Enables backlog queue for incoming connections */
 /* ---------- TCP settings ---------- */
 #define TCP_MSS                         1460
-#define TCP_SND_BUF                     (10 * TCP_MSS)
+#define TCP_SND_BUF                     (4 * TCP_MSS)
 #define TCP_SND_QUEUELEN                25
-#define TCP_WND                         (10 * TCP_MSS)
+#define TCP_WND                         (4 * TCP_MSS)
 #define LWIP_WND_SCALE                  0
 #define TCP_RCV_SCALE                   0
 #define TCPIP_MBOX_SIZE 				30
 #define DEFAULT_TCP_RECVMBOX_SIZE		30
+#define DEFAULT_ACCEPTMBOX_SIZE			6	//for server mode
 /* ---------- PBUF pool ---------- */
 #define PBUF_POOL_SIZE                  12
 #define PBUF_POOL_BUFSIZE      			1524
@@ -84,6 +88,12 @@
 #define LWIP_NETCONN_FULLDUPLEX 		0
 #define LWIP_TIMEVAL_PRIVATE			0
 
+#if LWIP_HTTPD ==1
+#define LWIP_HTTPD_SSI                  1   /* Enable Server-Side Includes for dynamic values like temperature */
+#define LWIP_HTTPD_CGI                  1   /* Enable Common Gateway Interface if needed */
+#define HTTPD_USE_CUSTOM_FSDATA         0   /* Uses standard generated fsdata */
+#define LWIP_HTTPD_FILE_EXTENSION     1
+#endif
 
 #endif /* LWIP_HDR_LWIPOPTS_H */
 

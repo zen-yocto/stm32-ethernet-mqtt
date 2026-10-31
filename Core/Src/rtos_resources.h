@@ -14,8 +14,10 @@
 extern QueueHandle_t dhtQueue;
 extern SemaphoreHandle_t txSemaphore;
 extern QueueHandle_t xMQTTQueue;
+extern QueueHandle_t xHTTPQueue;
 extern TaskHandle_t mqttTaskHandle;
 extern TaskHandle_t EthernetTaskHandle;
 extern TaskHandle_t displayTaskHandle;
 extern TaskHandle_t dht22TaskHandle;
+extern TaskHandle_t serverTaskHandle;
 #endif /* SRC_RTOS_RESOURCES_H_ */

@@ -19,11 +19,15 @@ void DHT_SetPinOutput(void);
 
 uint8_t DHT_ReadByte(void);
 uint8_t DHT_Read(float *temperature, float *humidity);
+TickType_t xLastWakeTime;
 
 void DHT22_Task(void *argument)
 {
 	 dhtQueue = xQueueCreate(5, sizeof(DHT22_Data_t));
 	 xMQTTQueue = xQueueCreate(5, sizeof(DHT22_Data_t));
+	 xHTTPQueue = xQueueCreate(5, sizeof(DHT22_Data_t));
+	 xLastWakeTime = xTaskGetTickCount();
+	 const TickType_t xFrequency = pdMS_TO_TICKS(2000);
 	 for(;;){
 		if (DHT_Read(&dht22_measure.temp, &dht22_measure.humid) == 0)
 			{
@@ -48,9 +52,14 @@ void DHT22_Task(void *argument)
 						xQueueSend(xMQTTQueue, &dht22_measure, 0);
 					} else {
 						// Queue is full
-
 					}
-					vTaskDelay(pdMS_TO_TICKS(2000));
+					if (uxQueueSpacesAvailable(xHTTPQueue) > 0) {
+						// Queue has space, safe to send
+						xQueueSend(xHTTPQueue, &dht22_measure, 0);
+					} else {
+						// Queue is full
+					}
+					vTaskDelayUntil(&xLastWakeTime, xFrequency);
 			}
 }
   void CreateDHT22Task(void)

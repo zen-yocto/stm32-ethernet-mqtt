@@ -100,10 +100,10 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="Inc/test|Inc/src/apps/http/fs|Inc/src/apps/http/makefsdata|Src/UART.c|Inc/src/apps/http/fs.c|Inc/src/apps/http/fsdata.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Core"/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="MBEDTLS"/>
+						<entry excluding="Src/tcp_test.c|Inc/test|Inc/src/apps/http/fs|Inc/src/apps/http/makefsdata|Src/UART.c|Inc/src/apps/http/fs.c|Inc/src/apps/http/fsdata.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Core"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Drivers"/>
-						<entry excluding="Third_Party/lwIP/src/apps/http|Third_Party/lwIP/test|Third_Party/lwIP/apps/http/makefsdata|Third_Party/lwIP/apps/http/fs|Third_Party/lwIP/apps/http/fsdata.c|Third_Party/lwIP/apps/http/fs.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Middlewares"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="MBEDTLS"/>
+						<entry excluding="Third_Party/lwIP/src/apps/tftp|Third_Party/lwIP/src/apps/sntp|Third_Party/lwIP/src/apps/snmp|Third_Party/lwIP/src/apps/smtp|Third_Party/lwIP/src/apps/netbiosns|Third_Party/lwIP/src/apps/mqtt|Third_Party/lwIP/src/apps/mdns|Third_Party/lwIP/src/apps/lwiperf|Third_Party/lwIP/src/apps/altcp_tls|Third_Party/lwIP/src/apps/http|Third_Party/lwIP/src/apps/http/fsdata.c|Third_Party/lwIP/src/apps/http/makefsdata|Third_Party/lwIP/test|Third_Party/lwIP/apps/http/makefsdata|Third_Party/lwIP/apps/http/fs|Third_Party/lwIP/apps/http/fsdata.c|Third_Party/lwIP/apps/http/fs.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Middlewares"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -198,10 +198,10 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="Inc/test|Inc/src/apps/http/fs|Inc/src/apps/http/makefsdata|Src/UART.c|Inc/src/apps/http/fs.c|Inc/src/apps/http/fsdata.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Core"/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="MBEDTLS"/>
+						<entry excluding="Src/tcp_test.c|Inc/test|Inc/src/apps/http/fs|Inc/src/apps/http/makefsdata|Src/UART.c|Inc/src/apps/http/fs.c|Inc/src/apps/http/fsdata.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Core"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Drivers"/>
-						<entry excluding="Third_Party/lwIP/src/apps/http|Third_Party/lwIP/test|Third_Party/lwIP/apps/http/makefsdata|Third_Party/lwIP/apps/http/fs|Third_Party/lwIP/apps/http/fsdata.c|Third_Party/lwIP/apps/http/fs.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Middlewares"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="MBEDTLS"/>
+						<entry excluding="Third_Party/lwIP/src/apps/tftp|Third_Party/lwIP/src/apps/sntp|Third_Party/lwIP/src/apps/snmp|Third_Party/lwIP/src/apps/smtp|Third_Party/lwIP/src/apps/netbiosns|Third_Party/lwIP/src/apps/mqtt|Third_Party/lwIP/src/apps/mdns|Third_Party/lwIP/src/apps/lwiperf|Third_Party/lwIP/src/apps/altcp_tls|Third_Party/lwIP/src/apps/http|Third_Party/lwIP/src/apps/http/fsdata.c|Third_Party/lwIP/src/apps/http/makefsdata|Third_Party/lwIP/test|Third_Party/lwIP/apps/http/makefsdata|Third_Party/lwIP/apps/http/fs|Third_Party/lwIP/apps/http/fsdata.c|Third_Party/lwIP/apps/http/fs.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Middlewares"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>

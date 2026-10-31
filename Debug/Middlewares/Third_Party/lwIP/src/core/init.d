@@ -85,8 +85,6 @@ Middlewares/Third_Party/lwIP/src/core/init.o: \
  ../Middlewares/Third_Party/lwIP/src/core/../include/lwip/priv/../prot/tcp.h \
  ../Middlewares/Third_Party/lwIP/src/core/../include/lwip/raw.h \
  ../Middlewares/Third_Party/lwIP/src/core/../include/lwip/sockets.h \
- ../Middlewares/Third_Party/lwIP/src/core/../include/lwip/inet.h \
- ../Middlewares/Third_Party/lwIP/src/core/../include/lwip/errno.h \
  ../Middlewares/Third_Party/lwIP/src/core/../include/lwip/stats.h \
  ../Middlewares/Third_Party/lwIP/src/core/../include/lwip/sys.h \
  ../Middlewares/Third_Party/lwIP/src/core/../include/lwip/timeouts.h \
@@ -182,8 +180,6 @@ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/err
 ../Middlewares/Third_Party/lwIP/src/core/../include/lwip/priv/../prot/tcp.h:
 ../Middlewares/Third_Party/lwIP/src/core/../include/lwip/raw.h:
 ../Middlewares/Third_Party/lwIP/src/core/../include/lwip/sockets.h:
-../Middlewares/Third_Party/lwIP/src/core/../include/lwip/inet.h:
-../Middlewares/Third_Party/lwIP/src/core/../include/lwip/errno.h:
 ../Middlewares/Third_Party/lwIP/src/core/../include/lwip/stats.h:
 ../Middlewares/Third_Party/lwIP/src/core/../include/lwip/sys.h:
 ../Middlewares/Third_Party/lwIP/src/core/../include/lwip/timeouts.h:

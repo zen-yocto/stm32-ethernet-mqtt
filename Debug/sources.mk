@@ -34,15 +34,6 @@ Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang \
 Middlewares/Third_Party/MQTT/MQTTClient-C/src \
 Middlewares/Third_Party/MQTT/MQTTPacket/src \
 Middlewares/Third_Party/lwIP/src/api \
-Middlewares/Third_Party/lwIP/src/apps/altcp_tls \
-Middlewares/Third_Party/lwIP/src/apps/lwiperf \
-Middlewares/Third_Party/lwIP/src/apps/mdns \
-Middlewares/Third_Party/lwIP/src/apps/mqtt \
-Middlewares/Third_Party/lwIP/src/apps/netbiosns \
-Middlewares/Third_Party/lwIP/src/apps/smtp \
-Middlewares/Third_Party/lwIP/src/apps/snmp \
-Middlewares/Third_Party/lwIP/src/apps/sntp \
-Middlewares/Third_Party/lwIP/src/apps/tftp \
 Middlewares/Third_Party/lwIP/src/core \
 Middlewares/Third_Party/lwIP/src/core/ipv4 \
 Middlewares/Third_Party/lwIP/src/core/ipv6 \

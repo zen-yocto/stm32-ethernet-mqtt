@@ -4,6 +4,8 @@
 ../Middlewares/Third_Party/lwIP/src/core/tcp.c:234:1:tcp_tmr	2
 ../Middlewares/Third_Party/lwIP/src/core/tcp.c:251:1:tcp_remove_listener	4
 ../Middlewares/Third_Party/lwIP/src/core/tcp.c:269:1:tcp_listen_closed	4
+../Middlewares/Third_Party/lwIP/src/core/tcp.c:294:1:tcp_backlog_delayed	5
+../Middlewares/Third_Party/lwIP/src/core/tcp.c:317:1:tcp_backlog_accepted	5
 ../Middlewares/Third_Party/lwIP/src/core/tcp.c:348:1:tcp_close_shutdown	20
 ../Middlewares/Third_Party/lwIP/src/core/tcp.c:409:1:tcp_close_shutdown_fin	11
 ../Middlewares/Third_Party/lwIP/src/core/tcp.c:484:1:tcp_close	3
@@ -14,7 +16,7 @@
 ../Middlewares/Third_Party/lwIP/src/core/tcp.c:764:1:tcp_bind_netif	2
 ../Middlewares/Third_Party/lwIP/src/core/tcp.c:779:1:tcp_accept_null	2
 ../Middlewares/Third_Party/lwIP/src/core/tcp.c:826:1:tcp_listen_with_backlog	1
-../Middlewares/Third_Party/lwIP/src/core/tcp.c:849:1:tcp_listen_with_backlog_and_err	10
+../Middlewares/Third_Party/lwIP/src/core/tcp.c:849:1:tcp_listen_with_backlog_and_err	12
 ../Middlewares/Third_Party/lwIP/src/core/tcp.c:934:1:tcp_update_rcv_ann_wnd	5
 ../Middlewares/Third_Party/lwIP/src/core/tcp.c:972:1:tcp_recved	6
 ../Middlewares/Third_Party/lwIP/src/core/tcp.c:1015:1:tcp_new_port	6

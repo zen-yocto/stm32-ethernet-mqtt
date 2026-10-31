@@ -41,20 +41,6 @@ Core/Src/MQTT_task.o: ../Core/Src/MQTT_task.c ../Core/Src/defines.h \
  D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/MQTT/MQTTPacket/src/MQTTPacket.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/freertos.h \
  D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/netdb.h \
- D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/arch.h \
- D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/inet.h \
- D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/sockets.h \
- D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/netif.h \
- D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/stats.h \
- D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/mem.h \
- D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/memp.h \
- D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/priv/memp_std.h \
- D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/priv/memp_priv.h \
- D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/priv/../opt.h \
- D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/priv/../mem.h \
- D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/priv/mem_priv.h \
- D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/inet.h \
- D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/errno.h \
  D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/err.h \
  D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/sys.h \
  ../Middlewares/Third_Party/mbedTLS/include/mbedtls/net_sockets.h \
@@ -126,20 +112,6 @@ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/MQTT/MQTTPacket/src/Stack
 D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/MQTT/MQTTPacket/src/MQTTPacket.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/freertos.h:
 D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/netdb.h:
-D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/arch.h:
-D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/inet.h:
-D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/sockets.h:
-D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/netif.h:
-D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/stats.h:
-D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/mem.h:
-D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/memp.h:
-D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/priv/memp_std.h:
-D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/priv/memp_priv.h:
-D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/priv/../opt.h:
-D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/priv/../mem.h:
-D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/priv/mem_priv.h:
-D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/inet.h:
-D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/errno.h:
 D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/err.h:
 D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/sys.h:
 ../Middlewares/Third_Party/mbedTLS/include/mbedtls/net_sockets.h:

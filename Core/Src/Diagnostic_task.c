@@ -54,6 +54,9 @@ void vDiagnosticsTask(void *pvParameters)
         UBaseType_t diag_hwm = uxTaskGetStackHighWaterMark(diagTaskHandle);
 
             printf("DIAG: DIAGNOSTICS task stack (%lu)\r\n", diag_hwm);
+        UBaseType_t srvr_hwm = uxTaskGetStackHighWaterMark(serverTaskHandle);
+
+            printf("DIAG: SERVER task stack (%lu)\r\n", srvr_hwm);
 
 
         vTaskDelay(pdMS_TO_TICKS(1000));

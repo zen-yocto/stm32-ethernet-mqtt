@@ -12,11 +12,13 @@ extern void CreateDHT22Task(void);
 extern void CreateEthernetTask(void);
 extern void CreateMQTTTask(void);
 extern void CreateDiagnosticsTask(void);
+extern void CreateServerTask(void);
 void main_thread_entry(void){
 CreateEthernetTask();
-CreateMQTTTask();
 CreateDHT22Task();
 CreateDisplayTask();
+CreateMQTTTask();
+CreateServerTask();
 CreateDiagnosticsTask();
 }
 

@@ -1,47 +1,51 @@
+<!DOCTYPE html>
 <html>
-<head><title>lwIP - A Lightweight TCP/IP Stack</title></head>
-<body bgcolor="white" text="black">
+<head>
+    <title>STM32F411 Telemetry</title>
+    <meta charset="utf-8">
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            text-align: center; 
+            margin-top: 50px; 
+            background-color: #f4f4f9; 
+        }
+        h2 { color: #333; }
+        .card { 
+            background: white; 
+            padding: 25px; 
+            border-radius: 8px; 
+            display: inline-block; 
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+        }
+        .val { 
+            font-size: 28px; 
+            color: #007BFF; 
+            font-weight: bold; 
+        }
+    </style>
+    <script>
+        function updateTelemetry() {
+            fetch('/api/data')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('temp').innerText = data.temp.toFixed(1);
+                    document.getElementById('humid').innerText = data.humid.toFixed(1);
+                })
+                .catch(err => console.log('AJAX fetch error:', err));
+        }
 
-    <table width="100%">
-      <tr valign="top"><td width="80">	  
-	  <a href="http://www.sics.se/"><img src="/img/sics.gif"
-	  border="0" alt="SICS logo" title="SICS logo"></a>
-	</td><td width="500">	  
-	  <h1>lwIP - A Lightweight TCP/IP Stack</h1>
-	  <p>
-	    The web page you are watching was served by a simple web
-	    server running on top of the lightweight TCP/IP stack <a
-	    href="http://www.sics.se/~adam/lwip/">lwIP</a>.
-	  </p>
-	  <p>
-	    lwIP is an open source implementation of the TCP/IP
-	    protocol suite that was originally written by <a
-	    href="http://www.sics.se/~adam/lwip/">Adam Dunkels
-	    of the Swedish Institute of Computer Science</a> but now is
-	    being actively developed by a team of developers
-	    distributed world-wide. Since it's release, lwIP has
-	    spurred a lot of interest and has been ported to several
-	    platforms and operating systems. lwIP can be used either
-	    with or without an underlying OS.
-	  </p>
-	  <p>
-	    The focus of the lwIP TCP/IP implementation is to reduce
-	    the RAM usage while still having a full scale TCP. This
-	    makes lwIP suitable for use in embedded systems with tens
-	    of kilobytes of free RAM and room for around 40 kilobytes
-	    of code ROM.
-	  </p>
-	  <p>
-	    More information about lwIP can be found at the lwIP
-	    homepage at <a
-	    href="http://savannah.nongnu.org/projects/lwip/">http://savannah.nongnu.org/projects/lwip/</a>
-	    or at the lwIP wiki at <a
-	    href="http://lwip.wikia.com/">http://lwip.wikia.com/</a>.
-	  </p>
-	</td><td>
-	  &nbsp;
-	</td></tr>
-      </table>
+        // Poll every 2 seconds in the background without reloading the page
+        setInterval(updateTelemetry, 2000);
+    </script>
+</head>
+<body>
+    <div class="card">
+        <h2>STM32F411 Live Telemetry</h2>
+        <hr style="border:0; border-top:1px solid #ddd; margin:15px 0;">
+        <p>Temperature: <span id="temp" class="val">--.-</span> &deg;C</p>
+        <p>Humidity: <span id="humid" class="val">--.-</span> %%</p>
+        <p style="color: gray; font-size: 11px; margin-top: 20px;">Async AJAX Active (No Page Reload)</p>
+    </div>
 </body>
 </html>
-

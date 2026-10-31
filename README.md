@@ -14,7 +14,6 @@ This project is designed for embedded systems use cases where you need a low-pow
 - Secure MQTT with mbedTLS and TLS 1.2 certificate validation
 - lwIP-based TCP/IP networking for Ethernet communication
 - DHCP client support for automatic network configuration, with static IP fallback
-- OLED status display for local runtime diagnostics and quick visual feedback
 - UART debugging and structured status logging
 - Non-blocking DNS retry handling and resilient network startup
 - Robust error handling and recovery flows
@@ -25,17 +24,14 @@ This project is designed for embedded systems use cases where you need a low-pow
 - ENC28J60 Ethernet controller over SPI
 - DHT22 (AM2302) sensor
 - 10/100Base-T Ethernet connection to a local router or network
-- 128x64 SSD1306-compatible OLED display (I2C) for local status information
-- Pull-up resistor on the DHT22 data line as required by the sensor wiring
-- Optional USB-UART adapter for serial debugging
+- 128x64 SSD1306-compatible OLED display (SPI) for local status information
 
 ## Wiring Overview
 
 - SPI interface connected to ENC28J60: SCK, MISO, MOSI, CS
 - DHT22 data pin connected to a defined GPIO input
-- I2C interface connected to the OLED display: SDA, SCL, and power/ground
+- SPI interface connected to the OLED display: SCK, MOSI, CS and power/ground
 - Ethernet RJ45 cable connected to a LAN with DHCP or a configured static IP
-- Serial UART connected to a PC at 115200 baud for logs and diagnostics
 
 ## System Overview
 
@@ -56,9 +52,7 @@ The embedded HTTP server hosts a small responsive Flex-based web UI that display
 
 - Current temperature
 - Current humidity
-- Refresh/update status
-- Connection state
-- Recent telemetry or last sync timestamp
+
 
 The UI is intentionally lightweight and optimized for embedded resources, making it suitable for local monitoring without a powerful external web stack.
 
@@ -73,7 +67,7 @@ Key networking features include:
 - DNS resolution for broker discovery and network reachability checks
 - HTTP server for local browser access and system monitoring
 - MQTT client connectivity for publishing sensor data to an MQTT broker
-- mbedTLS-backed TLS support for secure MQTT communication when needed
+- mbedTLS-backed TLS support for secure MQTT communication
 
 The stack is designed to be dependable on constrained hardware, with retry loops and startup backoff logic to handle slow or transient network conditions.
 
@@ -112,9 +106,6 @@ do {
 A small OLED display can be connected to the STM32 to provide a quick visual summary of the device status without needing a browser session. Typical display content includes:
 
 - Current temperature and humidity
-- Wi-Fi/Ethernet connection status
-- DHCP or static IP mode
-- MQTT publishing state
 - Error and heartbeat indicators
 
 This makes the board useful for local standalone deployment or rapid debugging during bring-up.
@@ -140,8 +131,6 @@ printf("Data published successfully!\r\n"
 - `Core/` — main firmware and application logic
 - `Drivers/` — hardware abstraction and peripheral drivers
 - `Middlewares/` — lwIP and related networking middleware
-- `TLS/` — certificate and secure MQTT configuration
-- `HTTP/` — embedded web server and UI assets
 - `README.md` — project documentation
 
 ## Getting Started

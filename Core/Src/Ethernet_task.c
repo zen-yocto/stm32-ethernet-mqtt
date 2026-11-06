@@ -19,90 +19,50 @@
 #include "lwip/dns.h"       // for tcpip_init(), tcpip_input()
 #include "tcp_test.h"
 #include "rtos_resources.h"
-
+char ip_str_buffer[16] = "";
 
 SemaphoreHandle_t txSemaphore;
-uint8_t MQTT_tcp_corrupt=0;
 
 ENC28J60_Frame recieveFrame;
+
+void Ethernet_Init();
 void ENC28J60_TestSend(void);
 void sendARPReply(uint8_t *rxFrame);
 void processFrame(uint16_t len);
 void enc28j60_parseFrame(ENC28J60_Frame *f, const uint8_t *buf, uint16_t len);
+static void enc28j60_link_callback(struct netif *netif);
 extern void CreateMQTTTask(void);
 struct pbuf *low_level_input(struct netif *netif);
 err_t low_level_output(struct netif *netif, struct pbuf *p);
+
 TaskHandle_t EthernetTaskHandle;
 uint8_t header[6];
 uint8_t irq_rec=0;
 uint8_t pktCNT=0;
 struct netif gnetif;
 extern uint8_t myMAC[MAC_ADDRESS_BYTES_NUM];
+uint8_t eth_link_up=0;
+
+
 void Ethernet_Task(void *argument)
 {
-	ip4_addr_t ipaddr, netmask, gw;
-#if(LWIP_DHCP)
-	IP4_ADDR(&ipaddr, 0,0,0,0);
-	IP4_ADDR(&netmask, 0,0,0,0);
-	IP4_ADDR(&gw, 0,0,0,0);
-#else
-		IP4_ADDR(&ipaddr, 192,168,1,57);
-		IP4_ADDR(&netmask, 255,255,255,0);
-		IP4_ADDR(&gw, 192,168,1,1);
-#endif
-	tcpip_init(NULL, NULL);
+	 Ethernet_Init();
 
-
-	txSemaphore = xSemaphoreCreateBinary();
-	 xSemaphoreGive(txSemaphore);
-	netif_add(&gnetif, &ipaddr, &netmask, &gw, NULL,
-	          &ENC28J60_Init, &tcpip_input);
-	 gnetif.hwaddr_len = 6;
-		    memcpy(gnetif.hwaddr, myMAC, 6);
-
-		    gnetif.mtu = 1500;
-		    gnetif.flags = NETIF_FLAG_BROADCAST | NETIF_FLAG_ETHARP | NETIF_FLAG_LINK_UP |NETIF_FLAG_ETHERNET;
-
-		    gnetif.output     = etharp_output;
-		    gnetif.linkoutput = low_level_output;
-
-		    gnetif.name[0] = 'e';
-		    gnetif.name[1] = 'n';
-
-
-	netif_set_default(&gnetif);
-	netif_set_up(&gnetif);
-#if(LWIP_DHCP)
-	dhcp_start(&gnetif);
-#endif
-	 netif_set_link_up(&gnetif);
-	//netif_set_link_callback(&gnetif, link_callback);
-	//netif_set_status_callback(&gnetif, status_callback);
-	 ip_addr_t dnsserver;
-	 IP4_ADDR(&dnsserver, 8,8,8,8);   // Google DNS
-	 dns_setserver(0, &dnsserver);
-	//ENC28J60_Init();
-	//WriteControlReg(EIE, EIR_PKTIF_BIT | EIR_RXERIF_BIT | EIR_TXIF_BIT);
-	 /* USER CODE BEGIN 5 */
-	    /* Infinite loop */
-	    //Let ENC28J60 startup
-
-	uint8_t rev=0;
-	rev = ReadControlReg(EREVID);
-	uint16_t phstat2=0;
-	phstat2 = ReadPhyReg(PHSTAT2);
-	//uint16_t phstat2 = ReadPhyReg(PHSTAT2);
-	// ENC28J60_TestSend();
-	// Set TXIE bit in EIE
-
-	WriteControlReg(EIE, EIE_INTIE | EIE_PKTIE | EIE_TXIE| EIE_TXERIE|EIE_RXERIE);
-	//BitFieldSet(EIE, 0x80);
-
-   // sendGratuitousARP();
 	for(;;){
+		uint16_t phstat2 = ReadPhyReg(PHSTAT2);
+		     uint8_t physical_link_up = (phstat2 & 0x0400) != 0; // LSTAT bit
 
-		  //  ENC28J60_TestSend();
-		    // Now process the frame
+		     if (!physical_link_up) {
+		     		    	 eth_link_up=0;
+		     		         netif_set_link_down(&gnetif);
+
+		     }
+			 else if (physical_link_up && !netif_is_link_up(&gnetif)) {
+		    	 eth_link_up=0;
+		         netif_set_link_up(&gnetif);
+		     }
+		     else if (!ip4_addr_isany_val(*netif_ip4_addr(&gnetif)))
+		     			eth_link_up=1;
 
 //		ENC28J60_TestSend();
 	    uint8_t eir     = ReadControlReg(EIR);
@@ -114,7 +74,7 @@ void Ethernet_Task(void *argument)
 //	    uint8_t pktcnt  = ReadControlReg(EPKTCNT);
 //	    uint8_t macon3 = ReadControlReg(MACON3);
 //	    uint16_t phstat1 = ReadPhyReg(PHSTAT1);
-//	    uint16_t phstat2 = ReadPhyReg(PHSTAT2);
+	  //  uint16_t phstat2 = ReadPhyReg(PHSTAT2);
 	    uint16_t phir    = ReadPhyReg(PHIR);
 //	    uint16_t phie    = ReadPhyReg(PHIE);
 
@@ -209,6 +169,65 @@ void ENC28J60_TestSend(void)
     }
 }
 
+static void enc28j60_link_callback(struct netif *netif)
+{
+	if (netif_is_link_up(netif)) {
+	        netif_set_up(netif);
+			#if LWIP_DHCP
+	        if (ip4_addr_isany_val(*netif_ip4_addr(netif))) {
+	            printf("Starting DHCP client...\r\n");
+	            dhcp_start(netif);
+	        }
+		#endif
+		ip4addr_ntoa_r(netif_ip4_addr(&gnetif), ip_str_buffer, sizeof(ip_str_buffer));
+		printf("Assigned IP Address: %s\r\n", ip_str_buffer);
+	}
+
+}
+
+void Ethernet_Init(){
+	ip4_addr_t ipaddr, netmask, gw;
+	ip_addr_t dnsserver;
+
+	#if(LWIP_DHCP)
+		IP4_ADDR(&ipaddr, 0,0,0,0);
+		IP4_ADDR(&netmask, 0,0,0,0);
+		IP4_ADDR(&gw, 0,0,0,0);
+	#else
+			IP4_ADDR(&ipaddr, 192,168,1,57);
+			IP4_ADDR(&netmask, 255,255,255,0);
+			IP4_ADDR(&gw, 192,168,1,1);
+	#endif
+		tcpip_init(NULL, NULL);
+
+
+		txSemaphore = xSemaphoreCreateBinary();
+		 xSemaphoreGive(txSemaphore);
+		netif_add(&gnetif, &ipaddr, &netmask, &gw, NULL,
+		          &ENC28J60_Init, &tcpip_input);
+		 gnetif.hwaddr_len = 6;
+			    memcpy(gnetif.hwaddr, myMAC, 6);
+
+			    gnetif.mtu = 1500;
+			    gnetif.flags = NETIF_FLAG_BROADCAST | NETIF_FLAG_ETHARP | NETIF_FLAG_LINK_UP |NETIF_FLAG_ETHERNET;
+
+			    gnetif.output     = etharp_output;
+			    gnetif.linkoutput = low_level_output;
+
+			    gnetif.name[0] = 'e';
+			    gnetif.name[1] = 'n';
+			    netif_set_default(&gnetif);
+			    netif_set_link_callback(&gnetif, enc28j60_link_callback);
+			    netif_set_link_up(&gnetif);
+			   	 IP4_ADDR(&dnsserver, 8,8,8,8);   // Google DNS
+			   	 dns_setserver(0, &dnsserver);
+	   // sendGratuitousARP();
+				#if LWIP_DHCP
+				printf("Starting DHCP client...\r\n");
+				dhcp_start(&gnetif);
+				#endif
+		WriteControlReg(EIE, EIE_INTIE | EIE_PKTIE | EIE_TXIE| EIE_TXERIE|EIE_RXERIE);
+}
 
 err_t low_level_output(struct netif *netif, struct pbuf *p) {
 	struct pbuf *q;
@@ -265,8 +284,6 @@ struct pbuf *low_level_input(struct netif *netif)
     // Read RX pointers
     ERXWRPT = ReadControlRegPair(ERXWRPTL);
     ERXRDPT = ReadControlRegPair(ERXRDPTL);
-		if(ERXWRPT<ENC28J60_RX_BUF_START)
-			MQTT_tcp_corrupt=1;
     if (frame.nextPtr < ENC28J60_RX_BUF_START ||
         frame.nextPtr > ENC28J60_RX_BUF_END)
     {
@@ -327,5 +344,4 @@ struct pbuf *low_level_input(struct netif *netif)
 
     return p;
 }
-
 

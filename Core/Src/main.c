@@ -201,9 +201,6 @@ int main(void)
 //	  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_1, GPIO_PIN_SET);
 //	 HAL_Delay(500);
 	  	//  DHT22_GetTemp_Humidity(&temp,&humid);
-uint16_t gp=0 ;
- gp++;
- if(gp>100) gp=0;
 				  //ethernetif_input(&gnetif);
 				  // poll ENC28J60 for packets
 				        //  sys_check_timeouts();

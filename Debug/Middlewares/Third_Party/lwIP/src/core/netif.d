@@ -84,7 +84,14 @@ Middlewares/Third_Party/lwIP/src/core/netif.o: \
  ../Middlewares/Third_Party/lwIP/src/core/../include/netif/../lwip/prot/ethernet.h \
  ../Middlewares/Third_Party/lwIP/src/core/../include/netif/../lwip/netif.h \
  ../Middlewares/Third_Party/lwIP/src/core/../include/netif/../lwip/opt.h \
- ../Middlewares/Third_Party/lwIP/src/core/../include/netif/../lwip/pbuf.h
+ ../Middlewares/Third_Party/lwIP/src/core/../include/netif/../lwip/pbuf.h \
+ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/dhcp.h \
+ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/opt.h \
+ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/netif.h \
+ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/udp.h \
+ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/acd.h \
+ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/etharp.h \
+ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/prot/acd.h
 ../Middlewares/Third_Party/lwIP/src/core/../include/lwip/netif.h:
 ../Middlewares/Third_Party/lwIP/src/core/../include/lwip/opt.h:
 ../Core/Inc/lwipopts.h:
@@ -170,3 +177,10 @@ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/opt
 ../Middlewares/Third_Party/lwIP/src/core/../include/netif/../lwip/netif.h:
 ../Middlewares/Third_Party/lwIP/src/core/../include/netif/../lwip/opt.h:
 ../Middlewares/Third_Party/lwIP/src/core/../include/netif/../lwip/pbuf.h:
+D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/dhcp.h:
+D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/opt.h:
+D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/netif.h:
+D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/udp.h:
+D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/acd.h:
+D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/etharp.h:
+D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/prot/acd.h:

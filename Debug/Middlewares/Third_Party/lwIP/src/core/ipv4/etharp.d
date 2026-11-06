@@ -33,6 +33,24 @@ Middlewares/Third_Party/lwIP/src/core/ipv4/etharp.o: \
  ../Middlewares/Third_Party/lwIP/src/core/ipv4/../../include/lwip/stats.h \
  ../Middlewares/Third_Party/lwIP/src/core/ipv4/../../include/lwip/snmp.h \
  ../Middlewares/Third_Party/lwIP/src/core/ipv4/../../include/lwip/dhcp.h \
+ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/netif.h \
+ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/udp.h \
+ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/opt.h \
+ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/pbuf.h \
+ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/netif.h \
+ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/ip_addr.h \
+ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/ip.h \
+ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/prot/ip.h \
+ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/prot/../arch.h \
+ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/def.h \
+ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/err.h \
+ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/ip4.h \
+ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/ip6.h \
+ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/ip6_addr.h \
+ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/prot/udp.h \
+ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/acd.h \
+ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/etharp.h \
+ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/prot/acd.h \
  ../Middlewares/Third_Party/lwIP/src/core/ipv4/../../include/lwip/autoip.h \
  ../Middlewares/Third_Party/lwIP/src/core/ipv4/../../include/lwip/acd.h \
  ../Middlewares/Third_Party/lwIP/src/core/ipv4/../../include/lwip/prot/iana.h \
@@ -74,6 +92,24 @@ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/arch/cc.
 ../Middlewares/Third_Party/lwIP/src/core/ipv4/../../include/lwip/stats.h:
 ../Middlewares/Third_Party/lwIP/src/core/ipv4/../../include/lwip/snmp.h:
 ../Middlewares/Third_Party/lwIP/src/core/ipv4/../../include/lwip/dhcp.h:
+D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/netif.h:
+D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/udp.h:
+D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/opt.h:
+D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/pbuf.h:
+D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/netif.h:
+D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/ip_addr.h:
+D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/ip.h:
+D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/prot/ip.h:
+D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/prot/../arch.h:
+D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/def.h:
+D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/err.h:
+D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/ip4.h:
+D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/ip6.h:
+D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/ip6_addr.h:
+D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/prot/udp.h:
+D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/acd.h:
+D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/etharp.h:
+D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/prot/acd.h:
 ../Middlewares/Third_Party/lwIP/src/core/ipv4/../../include/lwip/autoip.h:
 ../Middlewares/Third_Party/lwIP/src/core/ipv4/../../include/lwip/acd.h:
 ../Middlewares/Third_Party/lwIP/src/core/ipv4/../../include/lwip/prot/iana.h:

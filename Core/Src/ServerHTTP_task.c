@@ -26,6 +26,9 @@ typedef struct {
 QueueHandle_t 	xHTTPQueue;
 DHT22_Data_t	HTTP_data;
 TaskHandle_t serverTaskHandle;
+
+extern uint8_t eth_link_up;
+
 static char http_response[4048];
 static char html_body[4000];
 static const char *HTML_TEMPLATE =
@@ -99,7 +102,9 @@ void ServerHttp_Task(void *argument)
 
     for(;;)
     {
+
         // Wait for a client connection
+    	if(eth_link_up){
         status = netconn_accept(conn, &newconn);
 
         if (status == ERR_OK)
@@ -162,10 +167,9 @@ void ServerHttp_Task(void *argument)
 
 
             }
-
             netconn_close(newconn);
             netconn_delete(newconn);
-
+    	}
             vTaskDelay(200);
     }
 }

@@ -169,7 +169,8 @@ void ssd1306_FillCircle(uint8_t par_x,uint8_t par_y,uint8_t par_r,SSD1306_COLOR 
 void ssd1306_Polyline(const SSD1306_VERTEX *par_vertex, uint16_t par_size, SSD1306_COLOR color);
 void ssd1306_DrawRectangle(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, SSD1306_COLOR color);
 void ssd1306_FillRectangle(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, SSD1306_COLOR color);
-
+void ssd1306_WriteStringAt(uint8_t x, uint8_t y, char* str, SSD1306_Font_t Font, SSD1306_COLOR color);
+void ssd1306_WriteCenteredString(uint8_t y, char* str, SSD1306_Font_t Font, SSD1306_COLOR color);
 /**
  * @brief Invert color of pixels in rectangle (include border)
  * 

@@ -32,7 +32,7 @@ extern mbedtls_entropy_context entropy;
 extern const char amazon_root_ca1[];
 extern const char digicert_root_ca[];
 extern const char letsencrypt_root_x1[];
-
+extern uint8_t eth_link_up;
 
 #define MQTT_BROKER_PORT 1883
 #define MQTT_BROKER_PORT_TLS 8883
@@ -40,7 +40,7 @@ extern const char letsencrypt_root_x1[];
 QueueHandle_t 	xMQTTQueue;
 TaskHandle_t 	mqttTaskHandle;
 DHT22_Data_t	MQTT_data;
-extern uint8_t MQTT_tcp_corrupt;
+
 extern int mqtt_socket_connect(void);
 extern void  tcp_client_init(void);
 extern void mqtt_test(void);
@@ -63,31 +63,84 @@ int NetworkWrite(struct Network *n, unsigned char *buffer, int len, int timeout_
 void NetworkDisconnect(struct Network *n);
 static int tls_send(void *ctx, const unsigned char *buf, size_t len);
 int tls_recv(void *ctx, unsigned char *buf, size_t len);
-
+static ip_addr_t server_ip;
+static volatile int dns_status = 0;
+static void dns_found_callback(const char *name, const ip_addr_t *ipaddr, void *callback_arg)
+{
+    if (ipaddr != NULL) {
+        server_ip = *ipaddr;
+        dns_status = 2; // Success!
+        printf("DNS resolved!\r\n");
+    } else {
+        dns_status = 3; // Failed
+        printf("DNS lookup returned NULL IP.\r\n");
+    }
+}
 int mqtt_connect_netconn(void){
 
-	tls_init();
-   // Initialize MQTT client
-   MQTTClientInit(&client, &network, 3000,
-                  sendbuf, sizeof(sendbuf),
-                  readbuf, sizeof(readbuf));
+	if (dns_status == 0 && eth_link_up) {
+	    printf("Initiating DNS lookup \r\n");
+	    dns_status = 1;
 
-   MQTTPacket_connectData data = MQTTPacket_connectData_initializer;
-   data.MQTTVersion = 4;                 // use 3.1.1
-   data.clientID.cstring = "stm32client";
-   data.keepAliveInterval = 30;
-   data.willFlag = 0;
-   	data.cleansession = 1;
-   rc = MQTTConnect(&client, &data);
+	    err_t err = dns_gethostbyname("broker.hivemq.com", &server_ip, dns_found_callback, NULL);
+
+	    if (err == ERR_OK) {
+	        // Resolved instantly from cache!
+	        dns_status = 2;
+	    } else if (err == ERR_INPROGRESS) {
+
+	        printf("DNS query sent, waiting for response...\r\n");
+	    } else {
+
+	        printf("DNS initiation failed (%s). retry...\r\n", lwip_strerr(err));
+	        dns_status = 3;
+	    }
+	}
 
 
-   	// Send CONNECT frame over mbedTLS
-   	if ((rc = MQTTConnect(&client, &data)) != 0) {
-   	    // Handle MQTT Connection Failure
-   	    printf("MQTT Connect failed with code: %d\r\n", rc);
-   	} else {
-   	    printf("Successfully connected to MQTT Broker over TLS!\r\n");
-   	}
+	if (dns_status == 2) {
+		tls_init();
+		   // Initialize MQTT client
+		   MQTTClientInit(&client, &network, 3000,
+		                  sendbuf, sizeof(sendbuf),
+		                  readbuf, sizeof(readbuf));
+
+		   MQTTPacket_connectData data = MQTTPacket_connectData_initializer;
+		   data.MQTTVersion = 4;                 // use 3.1.1
+		   data.clientID.cstring = "stm32client";
+		   data.keepAliveInterval = 30;
+		   data.willFlag = 0;
+		   	data.cleansession = 1;
+		   rc = MQTTConnect(&client, &data);
+
+
+		   	// Send CONNECT frame over mbedTLS
+		   	if ((rc = MQTTConnect(&client, &data)) != 0) {
+		   	    // Handle MQTT Connection Failure
+		   	    printf("MQTT Connect failed with code: %d\r\n", rc);
+		   	} else {
+		   	    printf("Successfully connected to MQTT Broker over TLS!\r\n");
+		   	}
+
+
+	}
+	else if (dns_status == 3 || !eth_link_up) {
+	    // FAILURE or Link Dropped: Wait before allowing a retry
+	    if (!eth_link_up) {
+	        printf("Ethernet link down. Pausing DNS logic...\r\n");
+	    } else {
+	        printf("DNS lookup failed. Retrying in 5 seconds...\r\n");
+	    }
+
+	    vTaskDelay(pdMS_TO_TICKS(5000));
+	    dns_status = 0; // Reset back to start state to retry
+	}
+	else if (dns_status == 1) {
+	    // IN PROGRESS: Yield control to FreeRTOS so other tasks run normally
+	    vTaskDelay(pdMS_TO_TICKS(100));
+	}
+
+
 return rc;
 
 }
@@ -103,23 +156,40 @@ void vMQTTTask(void *pvParameters)
 	//mqtt_socket_connect();
 
 	for(;;){
-
-		if(MQTT_tcp_corrupt) {
-			netconn_close(network.conn);
-	       netconn_delete(network.conn); MQTT_tcp_corrupt=0;
-		}
-		if (!client.isconnected)
+//		if (network.conn->state == NETCONN_CLOSE || network.conn->state == NETCONN_NONE){
+//
+//
+//				if (rc != 0) {
+//					mbedtls_ssl_close_notify(&ssl);
+//					mbedtls_ssl_free(&ssl);
+//					mbedtls_ssl_config_free(&conf);
+//
+//					if (network.conn != NULL) {
+//						netconn_close(network.conn);
+//						netconn_delete(network.conn);
+//						network.conn = NULL; // Crucial: Flag it as completely cleared
+//					}
+//					printf("Reconnection attempt failed. Retrying in next loop...\r\n");
+//				}
+//				vTaskDelay(pdMS_TO_TICKS(5000));
+//				tls_init();
+//			}
+		if(eth_link_up){
+		 if (!client.isconnected)
 		{
 		    printf("MQTT connection lost. Cleaning up and reconnecting...\r\n");
-		     client.isconnected = 0;
 		    mbedtls_ssl_close_notify(&ssl);
-		    mbedtls_ssl_free(&ssl);
-		    mbedtls_ssl_config_free(&conf);
-		    if (network.conn != NULL) {
-		        netconn_close(network.conn);
-		        netconn_delete(network.conn);
-		        network.conn = NULL;
-		    }
+			mbedtls_ssl_free(&ssl);
+			mbedtls_ssl_config_free(&conf);
+			mbedtls_ctr_drbg_free(&ctr_drbg);
+			mbedtls_entropy_free(&entropy);
+			mbedtls_x509_crt_free(&cert);
+			if (network.conn != NULL) {
+				netconn_close(network.conn);
+				netconn_delete(network.conn);
+				network.conn = NULL;
+			}
+		     client.isconnected = 0;
 
 		    vTaskDelay(pdMS_TO_TICKS(5000));
 		    if (mqtt_connect_netconn() != 0) {
@@ -127,7 +197,11 @@ void vMQTTTask(void *pvParameters)
 		    }
 		}
 
-		if (xQueueReceive(xMQTTQueue, &MQTT_data, pdMS_TO_TICKS(100)) == pdPASS) {
+		else
+		{
+
+			if (xQueueReceive(xMQTTQueue, &MQTT_data, pdMS_TO_TICKS(100)) == pdPASS) {
+
 				  MQTTMessage message;
 				  char payload[128];
 
@@ -158,8 +232,12 @@ void vMQTTTask(void *pvParameters)
 				 printf("Failed to publish data, MQTT return code: %d\r\n", rc);
 			 }
 
-        }
-			//MQTTYield(&client,100);
+			}
+		}
+		}
+		else
+			client.isconnected =0;
+		//MQTTYield(&client,100);
 		 vTaskDelay(pdMS_TO_TICKS(1000)); // publish every 5s
 		}
 }
@@ -274,23 +352,9 @@ int stm32_entropy_source(void *data, unsigned char *output, size_t len, size_t *
 }
 void tls_init(void)
 {
-	err_t err=0;
-    ip_addr_t server_ip;
-
-
     printf("\r\n--- Starting Secure TLS Test ---\r\n");
-
     NetworkInit(&network);
 
-    do {
-         	 err = netconn_gethostbyname("broker.hivemq.com", &server_ip);
-            if (err != ERR_OK) {
-                printf("DNS lookup failed (%s). Retrying in 2 seconds...\r\n", lwip_strerr(err));
-                vTaskDelay(pdMS_TO_TICKS(2000)); // Wait before trying again, keeping FreeRTOS happy
-            }
-        } while (err != ERR_OK);
-
-        printf("DNS lookup successful! IP resolved.\r\n");
     	//IP4_ADDR(&server_ip, 192,168,1,27);
        	    // Initialize network
        	    network.conn = netconn_new(NETCONN_TCP);
@@ -299,7 +363,6 @@ void tls_init(void)
     			}
 
        	  rc = netconn_connect(network.conn, &server_ip, MQTT_BROKER_PORT_TLS);
-
     rc = mbedtls_x509_crt_parse(&cert,
                                 (const unsigned char*) amazon_root_ca1,
                                 strlen(amazon_root_ca1)+1);
@@ -352,7 +415,6 @@ void tls_init(void)
 
     	    printf("Handshake Failed!\r\n");
     	    printf("  Return Code: -0x%04X (Decimal: %d)\r\n", -rc, rc);
-
     	} else {
     	    printf("TLS Handshake Successful!\r\n");
     	}

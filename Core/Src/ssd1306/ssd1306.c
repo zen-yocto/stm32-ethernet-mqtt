@@ -267,7 +267,57 @@ char ssd1306_WriteString(char* str, SSD1306_Font_t Font, SSD1306_COLOR color) {
     // Everything ok
     return *str;
 }
+/**
+ * @brief Writes text centered horizontally on the OLED screen.
+ * @param y Row coordinate (Y position)
+ * @param str Pointer to the string to write
+ * @param Font Font style to use
+ * @param color Text color (White / Black)
+ */
+void ssd1306_WriteCenteredString(uint8_t y, char* str, SSD1306_Font_t Font, SSD1306_COLOR color)
+{
+    uint16_t total_width = 0;
+    char *ptr = str;
 
+    // Calculate total pixel width of the string
+    while (*ptr) {
+        if (Font.char_width != NULL) {
+            // Proportional font: look up width based on ASCII offset (assuming standard ASCII starting at space 32)
+            // Adjust offset (e.g., - 32) depending on how your specific font table indexes characters
+            total_width += Font.char_width[(uint8_t)(*ptr) - 32];
+        } else {
+            // Monospaced font: use fixed width
+            total_width += Font.width;
+        }
+        ptr++;
+    }
+
+    // Calculate starting X coordinate to center the text (Screen width = 128px)
+    int16_t x = (128 - total_width) / 2;
+    if (x < 0) {
+        x = 0; // Prevent negative coordinates if string is too wide
+    }
+
+    // Set cursor to calculated center X and specified Y
+    ssd1306_SetCursor(x, y);
+
+    // Write the string
+    while (*str) {
+        ssd1306_WriteChar(*str, Font, color);
+        str++;
+    }
+}
+void ssd1306_WriteStringAt(uint8_t x, uint8_t y, char* str, SSD1306_Font_t Font, SSD1306_COLOR color)
+{
+    // Set cursor to the requested direct coordinates
+    ssd1306_SetCursor(x, y);
+
+    // Write the string
+    while (*str) {
+        ssd1306_WriteChar(*str, Font, color);
+        str++;
+    }
+}
 /* Position the cursor */
 void ssd1306_SetCursor(uint8_t x, uint8_t y) {
     SSD1306.CurrentX = x;

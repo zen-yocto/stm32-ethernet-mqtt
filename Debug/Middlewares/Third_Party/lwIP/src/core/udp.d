@@ -43,7 +43,22 @@ Middlewares/Third_Party/lwIP/src/core/udp.o: \
  ../Middlewares/Third_Party/lwIP/src/core/../include/lwip/prot/icmp6.h \
  ../Middlewares/Third_Party/lwIP/src/core/../include/lwip/stats.h \
  ../Middlewares/Third_Party/lwIP/src/core/../include/lwip/snmp.h \
- ../Middlewares/Third_Party/lwIP/src/core/../include/lwip/dhcp.h
+ ../Middlewares/Third_Party/lwIP/src/core/../include/lwip/dhcp.h \
+ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/netif.h \
+ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/udp.h \
+ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/acd.h \
+ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/opt.h \
+ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/etharp.h \
+ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/pbuf.h \
+ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/ip4_addr.h \
+ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/netif.h \
+ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/ip4.h \
+ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/prot/ethernet.h \
+ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/prot/../arch.h \
+ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/prot/ieee.h \
+ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/prot/etharp.h \
+ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/prot/ethernet.h \
+ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/prot/acd.h
 ../Middlewares/Third_Party/lwIP/src/core/../include/lwip/opt.h:
 ../Core/Inc/lwipopts.h:
 ../Middlewares/Third_Party/lwIP/src/core/../include/lwip/debug.h:
@@ -88,3 +103,18 @@ D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/arch/cc.
 ../Middlewares/Third_Party/lwIP/src/core/../include/lwip/stats.h:
 ../Middlewares/Third_Party/lwIP/src/core/../include/lwip/snmp.h:
 ../Middlewares/Third_Party/lwIP/src/core/../include/lwip/dhcp.h:
+D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/netif.h:
+D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/udp.h:
+D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/acd.h:
+D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/opt.h:
+D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/etharp.h:
+D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/pbuf.h:
+D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/ip4_addr.h:
+D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/netif.h:
+D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/ip4.h:
+D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/prot/ethernet.h:
+D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/prot/../arch.h:
+D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/prot/ieee.h:
+D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/prot/etharp.h:
+D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/prot/ethernet.h:
+D:/Documents/STM32/OLED_on_SPI/Middlewares/Third_Party/lwIP/src/include/lwip/prot/acd.h:

@@ -44,7 +44,7 @@
 #define LWIP_ICMP                       1
 #define LWIP_UDP                        1
 #define LWIP_TCP                        1
-#define LWIP_DHCP                       0   /* Enable DHCP */
+#define LWIP_DHCP                       1   /* Enable DHCP */
 #define LWIP_DNS                        1   /* Enable DNS resolver */
 #define LWIP_HTTPD						0
 
@@ -81,12 +81,13 @@
 #define TCPIP_THREAD_PRIO       17
 /* ---------- Misc ---------- */
 #define LWIP_HAVE_LOOPIF                0
-#define LWIP_NETIF_LINK_CALLBACK        0
+#define LWIP_NETIF_LINK_CALLBACK        1
 #define LWIP_NETIF_STATUS_CALLBACK      0
 #define LWIP_PROVIDE_ERRNO
 #define LWIP_TCPIP_CORE_LOCKING 		1
 #define LWIP_NETCONN_FULLDUPLEX 		0
 #define LWIP_TIMEVAL_PRIVATE			0
+
 
 #if LWIP_HTTPD ==1
 #define LWIP_HTTPD_SSI                  1   /* Enable Server-Side Includes for dynamic values like temperature */

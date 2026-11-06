@@ -13,10 +13,11 @@
 ../Middlewares/Third_Party/lwIP/src/core/netif.c:766:1:netif_remove	8
 ../Middlewares/Third_Party/lwIP/src/core/netif.c:851:1:netif_set_default	1
 ../Middlewares/Third_Party/lwIP/src/core/netif.c:873:1:netif_set_up	3
-../Middlewares/Third_Party/lwIP/src/core/netif.c:904:1:netif_issue_reports	7
+../Middlewares/Third_Party/lwIP/src/core/netif.c:904:1:netif_issue_reports	4
 ../Middlewares/Third_Party/lwIP/src/core/netif.c:951:1:netif_set_down	4
-../Middlewares/Third_Party/lwIP/src/core/netif.c:1020:1:netif_set_link_up	3
-../Middlewares/Third_Party/lwIP/src/core/netif.c:1058:1:netif_set_link_down	3
+../Middlewares/Third_Party/lwIP/src/core/netif.c:1020:1:netif_set_link_up	4
+../Middlewares/Third_Party/lwIP/src/core/netif.c:1058:1:netif_set_link_down	4
+../Middlewares/Third_Party/lwIP/src/core/netif.c:1096:1:netif_set_link_callback	2
 ../Middlewares/Third_Party/lwIP/src/core/netif.c:1675:1:netif_null_output_ip4	1
 ../Middlewares/Third_Party/lwIP/src/core/netif.c:1693:1:netif_name_to_index	2
 ../Middlewares/Third_Party/lwIP/src/core/netif.c:1712:1:netif_index_to_name	2

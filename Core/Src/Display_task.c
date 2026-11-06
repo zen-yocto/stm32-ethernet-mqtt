@@ -14,11 +14,27 @@
 char buffer[20];
 DHT22_Data_t dht22_display = {0};
 TaskHandle_t displayTaskHandle;
-
+extern char ip_str_buffer[];
 void Display_Task(void *argument){
 	uint8_t count=0;
  	  ssd1306_Init();
  for(;;){
+	 if ( ip_str_buffer[0] != '\0')
+	         {
+		 	 	 	 ssd1306_Fill(Black);
+					 ssd1306_UpdateScreen();
+				 ssd1306_WriteCenteredString(20, "IP Address:", Font_6x8, White);
+				 ssd1306_WriteCenteredString(32, ip_str_buffer, Font_6x8, White);
+
+
+				 ip_str_buffer[0] = '\0';
+				 ssd1306_UpdateScreen();
+
+				 vTaskDelay(2000);
+
+				 ssd1306_Fill(Black);
+				 ssd1306_UpdateScreen();
+	         }
 	 if (xQueueReceive(dhtQueue, &dht22_display, pdMS_TO_TICKS(100)) == pdTRUE){
 		sprintf(buffer, "%.2fC", dht22_display.temp);
 		ssd1306_SetCursor(15, 5);

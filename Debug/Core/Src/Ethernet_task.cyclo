@@ -1,5 +1,7 @@
-../Core/Src/Ethernet_task.c:41:6:Ethernet_Task	10
-../Core/Src/Ethernet_task.c:168:6:CreateEthernetTask	1
-../Core/Src/Ethernet_task.c:179:6:ENC28J60_TestSend	4
-../Core/Src/Ethernet_task.c:213:7:low_level_output	4
-../Core/Src/Ethernet_task.c:250:14:low_level_input	11
+../Core/Src/Ethernet_task.c:47:6:Ethernet_Task	14
+../Core/Src/Ethernet_task.c:128:6:CreateEthernetTask	1
+../Core/Src/Ethernet_task.c:139:6:ENC28J60_TestSend	4
+../Core/Src/Ethernet_task.c:172:13:enc28j60_link_callback	3
+../Core/Src/Ethernet_task.c:188:6:Ethernet_Init	1
+../Core/Src/Ethernet_task.c:232:7:low_level_output	4
+../Core/Src/Ethernet_task.c:269:14:low_level_input	10

@@ -85,7 +85,42 @@ void NMI_Handler(void)
 void HardFault_Handler(void)
 {
   /* USER CODE BEGIN HardFault_IRQn 0 */
+	// 1. Determine which stack pointer was active (MSP or PSP) using the Link Register (EXC_RETURN)
+	    uint32_t lr_val;
+	    __asm("MOV %[result], lr" : [result] "=r" (lr_val));
 
+	    uint32_t *stacked_regs;
+	    if ((lr_val & 0x00000004) == 0) {
+	        stacked_regs = (uint32_t *)__get_MSP(); // Main Stack Pointer was active
+	    } else {
+	        stacked_regs = (uint32_t *)__get_PSP(); // Process Stack Pointer was active
+	    }
+
+	    // 2. Extract stacked registers directly from the stack array
+	    volatile uint32_t stacked_r0  = stacked_regs[0];
+	    volatile uint32_t stacked_r1  = stacked_regs[1];
+	    volatile uint32_t stacked_r2  = stacked_regs[2];
+	    volatile uint32_t stacked_r3  = stacked_regs[3];
+	    volatile uint32_t stacked_r12 = stacked_regs[4];
+	    volatile uint32_t stacked_lr  = stacked_regs[5]; // Function LR before fault
+	    volatile uint32_t stacked_pc  = stacked_regs[6]; // EXACT instruction address where crash occurred
+	    volatile uint32_t stacked_psr = stacked_regs[7];
+
+	    // 3. Print out the diagnostic information
+	    printf("\n\n=== HARD FAULT DETECTED (Direct Registers) ===\r\n");
+	    printf("PC (Fault Address) = 0x%08lX\r\n", stacked_pc);
+	    printf("LR (Return Address)= 0x%08lX\r\n", stacked_lr);
+	    printf("R0 = 0x%08lX, R1 = 0x%08lX\r\n", stacked_r0, stacked_r1);
+
+	    // 4. Read ARM Cortex-M Fault Status Registers
+	    printf("SCB->CFSR  = 0x%08lX\r\n", (unsigned long)SCB->CFSR);
+	    printf("SCB->HFSR  = 0x%08lX\r\n", (unsigned long)SCB->HFSR);
+	    printf("SCB->MMAR  = 0x%08lX\r\n", (unsigned long)SCB->MMFAR); // Memory Management Fault Address
+	    printf("SCB->BFAR  = 0x%08lX\r\n", (unsigned long)SCB->BFAR); // Bus Fault Address
+
+	    // 5. Delay to let UART flush, then force reset
+	    for(volatile int i = 0; i < 5000000; i++);
+	    NVIC_SystemReset();
   /* USER CODE END HardFault_IRQn 0 */
   while (1)
   {

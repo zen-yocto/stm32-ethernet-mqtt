@@ -1,2 +1,2 @@
-../Core/Src/ServerHTTP_task.c:73:6:ServerHttp_Task	480	static
-../Core/Src/ServerHTTP_task.c:173:6:CreateServerTask	16	static
+../Core/Src/ServerHTTP_task.c:76:6:ServerHttp_Task	480	static
+../Core/Src/ServerHTTP_task.c:177:6:CreateServerTask	16	static
